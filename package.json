@@ -1,0 +1,16 @@
+{
+  "name": "tubes",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server/app"
+  },
+  "dependencies": {
+    "express": "3.1.0",
+    "socket.io": "~0.9.13",
+    "nib": "~0.9.1",
+    "redis": "~0.8.2",
+    "async": "~0.2.6",
+    "underscore": "~1.4.4"
+  }
+}

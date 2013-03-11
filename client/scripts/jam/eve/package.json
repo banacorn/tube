@@ -1,0 +1,24 @@
+{
+  "name"    : "eve",
+  "version" : "0.4.1",
+  "author"  : {
+    "name"  : "Dmitry Baranovskiy",
+    "email" : "dmitry@baranovskiy.com",
+    "url"   : "http://dmitry.baranovskiy.com"
+  },
+  "github": "https://github.com/DmitryBaranovskiy/eve",
+  "description" : "Simple custom events",
+  "jam":{
+    "main"    : "eve.js"
+  },
+  "categories": ["Events"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DmitryBaranovskiy/eve.git"
+  },
+  "licenses": [
+  {
+    "type": "MIT",
+    "url": "https://github.com/angular/angular.js/blob/master/LICENSE"
+  }]
+}

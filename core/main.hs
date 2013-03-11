@@ -23,9 +23,10 @@ test f = connectAndRun $ f >>= liftIO . print
 
 type Name = String
 type Time = Int
-data Block = Residential | Commercial deriving (Eq, Show)
-data Citizen = Citizen (Int, Int) (Int, Int) Time
-data City = City Name [Block] [Citizen]
+type Size = (Int, Int)
+type Place = (Int, Int)
+data Citizen = Citizen (Place, Place) (Time, Time)
+data City = City Name Size [Citizen]
 
 --kohl = City "Kohl" [Block] [Citizen]
 
@@ -34,10 +35,12 @@ randomNumbers n (from, to) = do
     gen <- newStdGen  
     return (take n (randomRs (from, to) gen))
 
-genCityBlocks :: Int -> IO [Block]
-genCityBlocks n = do
-    numbers <- randomNumbers n (0, 1)
-    return (map toBlock numbers)
-    where
-        toBlock 0 = Residential
-        toBlock 1 = Commercial
+
+
+--genCityBlocks :: Int -> IO [Block]
+--genCityBlocks n = do
+--    numbers <- randomNumbers n (0, 1)
+--    return (map toBlock numbers)
+--    where
+--        toBlock 0 = Residential
+--        toBlock 1 = Commercial
