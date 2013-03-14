@@ -55,6 +55,7 @@ app.post('/api/city', function (req, res) {
         if (err) throw err;
 
         db.hmset('tubes:city:' + id, {
+            id: id,
             name: payload.name,
             population: payload.population.toString(),
             map: JSON.stringify(payload.map)
@@ -77,15 +78,13 @@ app.get('/api/city', function (req, res) {
 
     db.smembers('tubes:city', function (err, data) {
         if (err) throw err;
-        console.log('all city id ', data);
-
         async.map(data, function (id, callback) {
             db.hgetall('tubes:city:' + id, function (err, data) {
                 callback(err, {
                     name: data.name,
                     population: parseInt(data.population, 10),
-                    id: id,
-                    map: JSON.parse(data.map);
+                    id: parseInt(id, 10),
+                    map: JSON.parse(data.map)
                 });
             });
         }, function(err, results){
@@ -93,6 +92,38 @@ app.get('/api/city', function (req, res) {
             res.json(results);
         });
     });
+
+});
+
+
+app.get('/api/city/:id', function (req, res) {
+
+    var id = req.params.id;
+
+    db.hgetall('tubes:city:' + id, function (err, data) {
+        if (err) throw err;
+        if (data) {
+            res.json({
+                name: data.name,
+                population: parseInt(data.population, 10),
+                id: parseInt(id, 10),
+                map: JSON.parse(data.map)
+            });
+        } else {
+            res.send(404, 'Sorry, we cannot find that!');
+        }
+    });
+
+});
+
+
+
+app.delete('/api/city/:id', function (req, res) {
+
+    var id = req.params.id;
+
+    db.del('tubes:city:' + id);
+    db.srem('tubes:city', id);
 
 });
 

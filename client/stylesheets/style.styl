@@ -52,7 +52,7 @@ p
 h2
     height: 60px
     line-height: 60px
-    margin-bottom: 20px
+    margin-bottom: 10px
     font-size: 150%
     color: white
     background: $gray
@@ -108,14 +108,20 @@ button
             margin: 0 -1px
 
 #cities
+    padding-bottom: 40px
     a
         overflow: hidden
         display: block
-        margin: 20px 0
+        margin: 10px 0
         padding: 10px
         background: $marble
-        // border-bottom: 4px solid $gray
-        // border-top: 4px solid $gray
+
+        &:hover
+            background: $red
+            .city-info
+                color: white
+                small
+                    color: $marble
 
         .city-info
             width: 100px
@@ -141,6 +147,39 @@ button
 #main
     margin-left: 260px
     padding: 40px 60px
+
+    & > * > section
+
+        background: $marble
+        padding: 40px
+
+#city
+    h2
+        overflow: hidden
+
+    .city-header-info
+        display: inline
+        float: left
+
+    .city-header-population
+        color: $grayXL
+
+
+    .city-header-buttons
+        display: inline
+        float: right
+
+        #remove-city
+            display: block
+            width: 40px
+            height: 40px
+            margin: 10px
+            text-align: center
+            line-height: 40px
+            cursor: pointer
+            &:hover
+                background: $grayL
+
 
 #create-form
 

@@ -9,7 +9,7 @@ a img{border:none}
 html,body,#container{height:100%;font-family:'Tauri';color:#333}
 a{text-decoration:none;color:inherit}
 p{padding:0 40px}
-h2{height:60px;line-height:60px;margin-bottom:20px;font-size:150%;color:#fff;background:#333;padding:0 40px}
+h2{height:60px;line-height:60px;margin-bottom:10px;font-size:150%;color:#fff;background:#333;padding:0 40px}
 button{height:60px;padding:0 20px;margin-right:10px;line-height:60px;border:none;font-size:inherit;font-family:inherit;border-radius:4px;cursor:pointer;color:#fff;background:#333;}
 button:hover{background:#444}
 button.primary{background:#c0392b}
@@ -17,12 +17,23 @@ button.primary:hover{background:#d24435}
 #nav{width:240px;position:fixed;padding:40px 40px;left:0;top:0;height:100%;overflow-y:scroll;}
 #nav h1 > a{display:block;height:60px;text-align:center;line-height:60px;font-size:150%;background:#c0392b;color:#fff;}
 #nav h1 > a i{font-size:75%;margin:0 -1px}
-#cities a{overflow:hidden;display:block;margin:20px 0;padding:10px;background:#eee;}
+#cities{padding-bottom:40px;}
+#cities a{overflow:hidden;display:block;margin:10px 0;padding:10px;background:#eee;}
+#cities a:hover{background:#c0392b;}
+#cities a:hover .city-info{color:#fff;}
+#cities a:hover .city-info small{color:#eee}
 #cities a .city-info{width:100px;height:40px;padding:20px 20px;display:block;float:left;font-size:120%;color:#c0392b;}
 #cities a .city-info small{font-size:75%;color:#333}
 #cities a .city-map{width:80px;height:80px;display:block;float:left;}
 #cities a .city-map canvas{width:80px;height:80px;background:#fff}
-#main{margin-left:260px;padding:40px 60px}
+#main{margin-left:260px;padding:40px 60px;}
+#main > * > section{background:#eee;padding:40px}
+#city h2{overflow:hidden}
+#city .city-header-info{display:inline;float:left}
+#city .city-header-population{color:#888}
+#city .city-header-buttons{display:inline;float:right;}
+#city .city-header-buttons #remove-city{display:block;width:40px;height:40px;margin:10px;text-align:center;line-height:40px;cursor:pointer;}
+#city .city-header-buttons #remove-city:hover{background:#444}
 #create-form{padding:40px;font-size:200%;background:#eee;}
 #create-form > div{min-height:60px;line-height:60px}
 #create-form .form-label{width:200px;text-align:right;display:inline;float:left;padding-right:20px;color:#c0392b}

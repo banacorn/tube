@@ -6,66 +6,133 @@ require.config({
         hogan       : 'jam/hogan/hogan',
         raphael     : 'jam/raphael'
     }
-});   
-
+}); 
 
 require([
     'jquery',
     'backbone',
+    'storage',
     'hogan',
     'raphael/raphael.amd',
+    'model',
     'text!../templates/home.html',
-    'text!../templates/nav.html'
-], function ($, Backbone, Hogan, Raphael, $$home, $$nav) {
+    'text!../templates/navitem.html',
+    'text!../templates/city.html'
+], function ($, Backbone, Storage, Hogan, Raphael, Model, $$home, $$navItem, $$city) {
 
     var socket = io.connect();
-
     var log = function (a) { console.log(a); };
 
-    var City = Backbone.Model.extend({
-        urlRoot: '/api/city',
-        defaults: {
-            name: 'stadt',
-            population: 1000000,
-            map: []
+    var City = Model.City;
+    var Cities = Model.Cities;
+
+    var CITIES = new Cities;
+
+    var Router = Backbone.Router.extend({
+        routes: {
+            '': 'home',
+            'city/:id': 'city'
         },
-        drawMap: function (type, x, y, w, h) {
-            var map = this.get('map');
-            map.push({
-                type: type,
-                x: x,
-                y: y,
-                w: w,
-                h: h
+        home: function () {
+            var homeView = new HomeView
+            $('#main').html(homeView.el);
+            $('input')[0].focus();
+        },
+        city: function (id) {
+            var cityView = new CityView({
+                cityID: id
             });
-            this.set('map', map);
+
+            $('#main').html(cityView.el);
+
         }
     });
 
-
-    var Cities = Backbone.Collection.extend({
-        model: City,
-        url: '/api/city'
-    });
+    var ROUTER = new Router;
 
     var NavView = Backbone.View.extend({
         tagName: 'ul',
-        template: Hogan.compile($$nav),
+        itemTemplate: Hogan.compile($$navItem),
         initialize: function () {
-            window.cities = new Cities;
-            this.listenTo(window.cities, 'sync', this.render);
-            this.listenTo(window.cities, 'add', this.render);
-            window.cities.fetch();
+
+            var aa = function (event) {
+                return function () {
+                    console.log(event + ' fired');
+                    console.log(CITIES.toJSON());
+                };
+            };
+
+            this.listenTo(CITIES, 'reset', this.render);
+            this.listenTo(CITIES, 'add', this.addItem);
+            this.listenTo(CITIES, 'remove', this.removeItem);
+            CITIES.fetch();
         },
         render: function () {
-            this.$el.html(this.template.render({
-                city: window.cities.toJSON()
-            }));
-            window.cities.each(function (city) {
-                log(city.toJSON())
-                // JSON.parse city.toJSON().map
+
+            var $el = this.$el;
+            var template = this.itemTemplate;
+            
+            CITIES.each(function (city) {
+
+                $el.append(template.render(city.toJSON()));
+
+                var map = city.get('map');
+
+                var canvas = $('#minimap-' + city.id, $el).get(0);
+                if (canvas) {
+
+                    var ctx = canvas.getContext('2d');
+
+                    var residentialColor = "#20A040";
+                    var commercialColor = "#296089";
+                    map.forEach(function (city) {
+
+                        if (city.type === 'residential')
+                            ctx.fillStyle = residentialColor;
+                        else
+                            ctx.fillStyle = commercialColor;
+
+                        ctx.fillRect(city.x, city.y, city.w, city.h);
+                    });
+                }
             })
             return this;
+        },
+        addItem: function (model) {
+            console.log('add', model);
+            this.$el.append(this.itemTemplate.render(model.toJSON()));
+        },
+        removeItem: function (model) {
+            console.log('remove', model);
+            $('#city-' + model.id, this.$el).remove();
+        }
+    });
+
+    var CityView = Backbone.View.extend({
+        template: Hogan.compile($$city),
+        tagName: 'section',
+        id: 'city',
+        events: {
+            'click #remove-city': 'removeCity'
+        },
+        initialize: function (options) {
+            this.model = new City({
+                id: options.cityID
+            });
+            this.render();
+            this.listenTo(this.model, 'change', this.render);
+            this.model.fetch();
+        },
+        render: function () {
+            this.$el.html(this.template.render(this.model.toJSON()));
+            return this;
+        },
+        removeCity: function () {
+
+            CITIES.remove(this.model)
+            this.model.destroy();
+            ROUTER.navigate('', true);
+
         }
     });
 
@@ -73,6 +140,9 @@ require([
         template: Hogan.compile($$home),
         tagName: 'section',
         id: 'home',
+        initialize: function () {
+            this.render();
+        },
         events: {
             'submit #create-form': 'create',
             'click #regenerate-button': 'generate',
@@ -148,11 +218,17 @@ require([
         },
         create: function () {
 
-            this.city.set('name', $('#city-name', this.$el).val().toUpperCase());
-            this.city.set('population', parseInt($('#city-population', this.$el).val(), 10));
+            var city = this.city;
 
-            this.city.save();
-            window.cities.add(this.city);
+            city.set('name', $('#city-name', this.$el).val().toUpperCase());
+            city.set('population', parseInt($('#city-population', this.$el).val(), 10));
+            city.save();
+            this.listenTo(city, 'change', function () {
+                console.log('fuck');
+                console.log(city.id)
+                CITIES.add(city);
+                ROUTER.navigate('/city/' + city.id, true);
+            });
             return false;
         },
         focusCityName: function () {
@@ -167,26 +243,14 @@ require([
         }
     });
 
-    var Router = Backbone.Router.extend({
-        routes: {
-            '': 'home',
-        },
-        home: function () {
-            var homeView = new HomeView
-            $('#main').html(homeView.render().el);
-            $('input')[0].focus();
-        }
-    });
 
     var App = Backbone.View.extend({
        
         initialize: function () {
 
 
-            this.router = new Router;
-
             var navView = new NavView;
-            $('#cities').html(navView.render().el);
+            $('#cities').html(navView.el);
         },
 
         // enables history api pushstate
@@ -200,11 +264,9 @@ require([
         // disables anchors
         // let the Router handle this
         disableAnchor: function () {
-            var that = this;
-
             $(document).on('click', 'a', function () {
                 urn = $(this).attr('href');
-                that.router.navigate(urn, true);
+                ROUTER.navigate(urn, true);
                 return false;
             });
         },

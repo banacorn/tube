@@ -28,19 +28,7 @@ type Place = (Int, Int)
 data Citizen = Citizen (Place, Place) (Time, Time)
 data City = City Name Size [Citizen]
 
---kohl = City "Kohl" [Block] [Citizen]
-
 randomNumbers :: Int -> (Int, Int) -> IO [Int]
 randomNumbers n (from, to) = do
     gen <- newStdGen  
     return (take n (randomRs (from, to) gen))
-
-
-
---genCityBlocks :: Int -> IO [Block]
---genCityBlocks n = do
---    numbers <- randomNumbers n (0, 1)
---    return (map toBlock numbers)
---    where
---        toBlock 0 = Residential
---        toBlock 1 = Commercial
