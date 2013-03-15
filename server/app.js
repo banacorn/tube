@@ -1,14 +1,21 @@
-var express = require('express');
 var path = require('path');
+
+// express
+var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-var redis = require('redis'),
-    db = redis.createClient();
+// redis
+var redis = require('redis');
+var db = redis.createClient();
 
+// some shit
 var async = require('async');
 var _ = require('underscore');
+
+// var city = require('./routes/city');
+
 //
 //  EXPRESS
 //
@@ -47,18 +54,33 @@ db.on("error", function (err) {
 });
 
 
+var parseHash = function (hash) {
+    for (key in hash) {
+        hash[key] = JSON.parse(hash[key]);
+    }
+    return hash;
+};
+
+var stringifyHash = function (hash) {
+    for (key in hash) {
+        hash[key] = JSON.stringify(hash[key]);
+    }
+    return hash;
+};
+
+
+// CITY
+
 app.post('/api/city', function (req, res) {
 
     var payload = req.body;
-
     db.get('tubes:city:id', function (err, id) {
         if (err) throw err;
 
         db.hmset('tubes:city:' + id, {
             id: id,
             name: payload.name,
-            population: payload.population.toString(),
-            map: JSON.stringify(payload.map)
+            population: payload.population.toString()
         });
 
         res.json({
@@ -83,8 +105,7 @@ app.get('/api/city', function (req, res) {
                 callback(err, {
                     name: data.name,
                     population: parseInt(data.population, 10),
-                    id: parseInt(id, 10),
-                    map: JSON.parse(data.map)
+                    id: parseInt(id, 10)
                 });
             });
         }, function(err, results){
@@ -106,14 +127,12 @@ app.get('/api/city/:id', function (req, res) {
             res.json({
                 name: data.name,
                 population: parseInt(data.population, 10),
-                id: parseInt(id, 10),
-                map: JSON.parse(data.map)
+                id: parseInt(id, 10)
             });
         } else {
             res.send(404, 'Sorry, we cannot find that!');
         }
     });
-
 });
 
 
@@ -127,8 +146,54 @@ app.delete('/api/city/:id', function (req, res) {
 
 });
 
-// io.sockets.on('connection', function (socket) {
-    
+// TERRAIN
 
 
-// });
+
+app.get('/api/terrain/:id', function (req, res) {
+    var id = req.params.id;
+    db.get('tubes:terrain:' + id, function (err, data) {
+        if (err) throw err;
+        if (data) {
+            res.json(JSON.parse(data));
+        } else {
+            res.send(404, 'Sorry, we cannot find that!');
+        }
+    });
+});
+
+app.get('/api/terrain', function (req, res) {
+    db.smembers('tubes:terrain', function (err, data) {
+        if (err) throw err;
+        async.map(data, function (id, callback) {
+            db.get('tubes:terrain:' + id, callback);
+        }, function(err, results){
+            if (err) throw err;
+            res.json(results.map(JSON.parse));
+        });
+    });
+});
+
+app.post('/api/terrain', function (req, res) {
+
+    var payload = req.body;
+
+    db.set('tubes:terrain:' + payload.id, JSON.stringify(payload.map));
+    res.json({
+        id: payload.id
+    });
+    db.sadd('tubes:terrain', payload.id);
+});
+
+
+app.put('/api/terrain/:id', function (req, res) {
+
+    var payload = req.body;
+    var id = req.params.id;
+
+    db.set('tubes:terrain:' + id, JSON.stringify(payload.map));
+    res.json({
+        id: id
+    });
+    db.sadd('tubes:terrain', id);
+});

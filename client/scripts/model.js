@@ -7,7 +7,19 @@ define([
         urlRoot: '/api/city',
         defaults: {
             name: 'stadt',
-            population: 1000000,
+            population: 1000000
+        }
+    });
+
+
+    var Cities = Backbone.Collection.extend({
+        model: City,
+        url: '/api/city'
+    });
+
+    var Terrain = Backbone.Model.extend({
+        urlRoot: '/api/terrain',
+        defaults: {
             map: []
         },
         drawMap: function (type, x, y, w, h) {
@@ -24,13 +36,15 @@ define([
     });
 
 
-    var Cities = Backbone.Collection.extend({
-        model: City,
-        url: '/api/city'
+    var Terrains = Backbone.Collection.extend({
+        model: Terrain,
+        url: '/api/terrain'
     });
 
     return {
         City: City,
-        Cities: Cities
+        Cities: Cities,
+        Terrain: Terrain,
+        Terrains: Terrains
     };
 });
