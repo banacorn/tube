@@ -3,6 +3,21 @@ require([
     'underscore'
 ], function (Backbone, _) {
 
+    // a thin layer of abstraction on top of localStorage
+
+    var Storage = {
+        set: function (url, data) {
+            localStorage[url] = JSON.stringify(data);
+        },
+        get: function (url) {
+            var data = localStorage[url];
+            return data ? JSON.parse(localStorage[url]) : undefined;
+        },
+        remove: function (url) {
+            delete localStorage[url];
+        }
+    };
+
     //
     //  Storage
     //
@@ -26,21 +41,21 @@ require([
         var type = (model instanceof Backbone.Collection) ? 'collection' : 'model';
 
         // helper function
-        var findModel = function (id) { return JSON.parse(localStorage[url + '/' + id]); };
+        var findModel = function (id) { return Storage.get(url + '/' + id); };
 
         if (type === 'collection') {
 
             var collection = model;
-            var IDs = localStorage[url] ? JSON.parse(localStorage[url]) : [];
+            var IDs = Storage.get(url) || [];
 
             switch (method) {
                 case 'read':
 
                     collection.once('sync', function () {
 
-                        var oldModelIDs     = localStorage[url] ? JSON.parse(localStorage[url]) : [];
+                        var oldModelIDs     = Storage.get(url) || [];
                         var newModelIDs     = collection.pluck('id');
-                        localStorage[url] = JSON.stringify(newModelIDs);
+                        Storage.set(url, newModelIDs);
 
                         var addedIDs        = _.difference(newModelIDs, oldModelIDs);
                         var removedIDs      = _.difference(oldModelIDs, newModelIDs);
@@ -49,18 +64,15 @@ require([
                         collection.forEach(function (model) {
                             var modelURL = url + '/' + model.id;
                             if (_.contains(addedIDs, model.id)) {
-                                localStorage[modelURL] = JSON.stringify(model);
-                                // collection.trigger('add', model, collection, options);
+                                Storage.set(modelURL,model);
                             } else if (! _.isEqual(model.toJSON(), findModel(model.id))) {
-                                localStorage[modelURL] = JSON.stringify(model);
-                                // collection.trigger('change', model, collection, options);
+                                Storage.set(modelURL,model);
                             }
                         });
 
                         removedIDs.forEach(function (id) {
                             var model = findModel(id);
-                            // collection.trigger('remove', model, collection, options);
-                            delete localStorage[url + '/' + id];
+                            Storage.remove(url + '/' + id);
                         });
 
                     });
@@ -80,22 +92,19 @@ require([
 
         if (type === 'model') {
 
-            var storedModel = localStorage[url] ? JSON.parse(localStorage[url]) : undefined;
 
 
             switch (method) {
                 case 'read':
                     model.once('sync', function () {
-                        // console.log('sync')
-                        if (! _.isEqual(model.toJSON(), localStorage[url])) {
-                            localStorage[url] = JSON.stringify(model.toJSON());
-                            // model.trigger('change', model);
+                        if (! _.isEqual(model.toJSON(), Storage.get(url))) {
+                            Storage.set(url, model);
                         }
                     });
 
                     // fetch localStorage and 'update'
-                    if (storedModel) {
-                        model.set(storedModel);
+                    if (Storage.get(url)) {
+                        model.set(Storage.get(url));
                     }
 
                     break;
@@ -107,7 +116,7 @@ require([
         // switch (method) {
         //     case 'read':
 
-        //         // update localStorage if synced from remote
+        //         // update `Storage if synced from remote
         //         model.once('sync', function () {
 
         //             var inLocalStorage = localStorage !== undefined && localStorage[url] !== undefined;
