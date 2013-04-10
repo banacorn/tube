@@ -13,6 +13,11 @@ require([
             var data = localStorage[url];
             return data ? JSON.parse(localStorage[url]) : undefined;
         },
+        sadd: function (url, data) {
+            var stored = Storage.get(url) || [];
+            stored.push(data);
+            Storage.set(url, _.uniq(stored));
+        },
         remove: function (url) {
             delete localStorage[url];
         }
@@ -106,6 +111,36 @@ require([
                     if (Storage.get(url)) {
                         model.set(Storage.get(url));
                     }
+
+                    break;
+                case 'create':
+
+                    model.once('sync', function () {
+                        Storage.set(url + '/' + model.id, model.toJSON());
+                        Storage.sadd(url, model.id);
+                    });
+
+                    break;
+
+                case 'update':
+
+                    var id = url.split('/').slice(-1).join('/');
+                    var urlRoot = url.split('/').slice(0, -1).join('/');
+
+                    Storage.set(url, model.toJSON());
+                    Storage.sadd(urlRoot, id);
+
+                    break;
+                case 'delete':
+                    
+
+                    var id = url.split('/').slice(-1).join('/');
+                    var urlRoot = url.split('/').slice(0, -1).join('/');
+
+                    Storage.remove(url);
+
+                    var ids = Storage.get(urlRoot);
+                    Storage.set(urlRoot, _.without(ids, id));
 
                     break;
             }

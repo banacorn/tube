@@ -20,15 +20,24 @@ require([
     'text!../templates/city.html'
 ], function ($, Backbone, Storage, Hogan, Raphael, Model, $$home, $$navItem, $$city) {
 
+    var Banana
+
+    // helper shits
     var socket = io.connect();
     var log = function (a) { console.log(a); };
 
+    // alias
     var City = Model.City;  
     var Cities = Model.Cities;
     var Terrain = Model.Terrain;
     var Terrains = Model.Terrains;
 
+    //
+    // COLLECTIONS
+    //
+
     var CITIES = new Cities;
+    var TERRAINS = new Terrains;
 
     var Router = Backbone.Router.extend({
         routes: {
@@ -62,27 +71,28 @@ require([
         initialize: function () {
             this.id = 'navitem-' + this.model.id;
             this.render();
-            this.terrain = new Terrain({
-                id: this.model.id
-            });
-
-            this.listenTo(this.terrain, 'change', this.renderTerrain);
-            this.terrain.fetch()
+            this.renderTerrain();
+            this.listenTo(this.model, 'destroy', this.remove);
         },
         render: function () {
             this.$el.html(this.template.render(this.model.toJSON()));
         },
         renderTerrain: function () {
-            var map = this.terrain.get('map');
-            console.log('rendering terrain', this.terrain.id);
-            console.log(this.terrain.toJSON())
-            var canvas = $('#terrain-' + this.terrain.id, this.$el).get(0);
+
+
+            var terrain = TERRAINS.get(this.model.id);
+            if (!terrain) return;
+
+            var map = terrain.get('map');
+            var canvas = $('#terrain-' + terrain.id, this.$el).get(0);
             if (canvas) {
 
                 var ctx = canvas.getContext('2d');
 
                 var residentialColor = "#20A040";
                 var commercialColor = "#296089";
+                var size = 40;
+
                 map.forEach(function (city) {
 
                     if (city.type === 'residential')
@@ -90,7 +100,12 @@ require([
                     else
                         ctx.fillStyle = commercialColor;
 
-                    ctx.fillRect(city.x, city.y, city.w, city.h);
+                    ctx.fillRect(
+                        city.x * (100 / size), 
+                        city.y * (100 / size), 
+                        city.w * (100 / size), 
+                        city.h * (100 / size)
+                    );
                 });
             }
         }
@@ -101,13 +116,12 @@ require([
         initialize: function () {
             this.listenTo(CITIES, 'reset', this.render);
             this.listenTo(CITIES, 'add', this.add);
-            this.listenTo(CITIES, 'remove', this.remove);
+            TERRAINS.fetch();
             CITIES.fetch();
         },
         render: function () {
             var $el = this.$el;
             CITIES.each(function (city) {
-                log('rendering city #' + city.id)
                 var navItemView = new NavItemView({
                     model: city
                 });
@@ -119,70 +133,9 @@ require([
                 model: model
             })
             this.$el.append(navItemView.el);
-        },
-        remove: function () {
-            $('')
         }
     });
 
-
-    // var NavView = Backbone.View.extend({
-    //     tagName: 'ul',
-    //     itemTemplate: Hogan.compile($$navItem),
-    //     initialize: function () {
-
-    //         var aa = function (event) {
-    //             return function () {
-    //                 console.log(event + ' fired');
-    //                 console.log(CITIES.toJSON());
-    //             };
-    //         };
-
-    //         this.listenTo(CITIES, 'reset', this.render);
-    //         this.listenTo(CITIES, 'add', this.addItem);
-    //         this.listenTo(CITIES, 'remove', this.removeItem);
-    //         CITIES.fetch();
-    //     },
-    //     render: function () {
-
-    //         var $el = this.$el;
-    //         var template = this.itemTemplate;
-            
-    //         CITIES.each(function (city) {
-
-    //             $el.append(template.render(city.toJSON()));
-
-    //             var map = city.get('map');
-
-    //             var canvas = $('#minimap-' + city.id, $el).get(0);
-    //             if (canvas) {
-
-    //                 var ctx = canvas.getContext('2d');
-
-    //                 var residentialColor = "#20A040";
-    //                 var commercialColor = "#296089";
-    //                 map.forEach(function (city) {
-
-    //                     if (city.type === 'residential')
-    //                         ctx.fillStyle = residentialColor;
-    //                     else
-    //                         ctx.fillStyle = commercialColor;
-
-    //                     ctx.fillRect(city.x, city.y, city.w, city.h);
-    //                 });
-    //             }
-    //         })
-    //         return this;
-    //     },
-    //     addItem: function (model) {
-    //         console.log('add', model);
-    //         this.$el.append(this.itemTemplate.render(model.toJSON()));
-    //     },
-    //     removeItem: function (model) {
-    //         console.log('remove', model);
-    //         $('#city-' + model.id, this.$el).remove();
-    //     }
-    // });
 
     var CityView = Backbone.View.extend({
         template: Hogan.compile($$city),
@@ -192,21 +145,23 @@ require([
             'click #remove-city': 'removeCity'
         },
         initialize: function (options) {
-            this.model = new City({
-                id: options.cityID
-            });
+            this.model = CITIES.get(options.cityID);
             this.render();
             this.listenTo(this.model, 'change', this.render);
             this.model.fetch();
         },
         render: function () {
-            console.log('city render')
             this.$el.html(this.template.render(this.model.toJSON()));
             return this;
         },
         removeCity: function () {
-            CITIES.remove(this.model)
+
+            var terrain = TERRAINS.get(this.model.id);
+            CITIES.remove(this.model);
+            TERRAINS.remove(terrain);
+            terrain.destroy();
             this.model.destroy();
+
             ROUTER.navigate('', true);
 
         }
@@ -241,22 +196,23 @@ require([
 
             var residentialColor = "#20A040";
             var commercialColor = "#296089";
+            var size = 40;
 
             // residential
             ctx.fillStyle = residentialColor;
 
             for (var i = 0; i < 30; i ++) {
 
-                var w = Math.cos(Math.random()) * 20;
+                var w = Math.cos(Math.random()) * size / 5;
                 var h = w * (Math.random() * 0.8 + 0.6);
-                var x = 50 - (w/2) + Math.sin(Math.random() * Math.PI * 2) * 30;
-                var y = 50 - (h/2) + Math.sin(Math.random() * Math.PI * 2) * 30;
+                var x = size / 2 - (w/2) + Math.sin(Math.random() * Math.PI * 2) * size * 0.3;
+                var y = size / 2 - (h/2) + Math.sin(Math.random() * Math.PI * 2) * size * 0.3;
 
                 ctx.fillRect (
-                    Math.floor(x) * 4,
-                    Math.floor(y) * 4,
-                    Math.floor(w) * 4,
-                    Math.floor(h) * 4
+                    Math.floor(x) * (400 / size),
+                    Math.floor(y) * (400 / size),
+                    Math.floor(w) * (400 / size),
+                    Math.floor(h) * (400 / size)
                 );
 
                 this.terrain.drawMap('residential', Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
@@ -266,21 +222,21 @@ require([
             // commercial
             ctx.fillStyle = commercialColor;
 
-            var shiftX = Math.sin(Math.random() * Math.PI * 2) * 10;
-            var shiftY = Math.sin(Math.random() * Math.PI * 2) * 10;
+            var shiftX = Math.sin(Math.random() * Math.PI * 2) * (size * 0.1);
+            var shiftY = Math.sin(Math.random() * Math.PI * 2) * (size * 0.1);
 
             for (var i = 0; i < 20; i ++) {
 
-                var w = Math.random() * 20;
+                var w = Math.random() * (size * 0.2);
                 var h = w * (Math.random() * 0.8 + 0.6);
-                var x = 50 - (w/2) + Math.sin(Math.random() * Math.PI * 2) * 25 + shiftX;
-                var y = 50 - (h/2) + Math.sin(Math.random() * Math.PI * 2) * 25 + shiftX;
+                var x = (size * 0.5) - (w/2) + Math.sin(Math.random() * Math.PI * 2) * (size * 0.25) + shiftX;
+                var y = (size * 0.5) - (h/2) + Math.sin(Math.random() * Math.PI * 2) * (size * 0.25) + shiftX;
 
                 ctx.fillRect (
-                    Math.floor(x) * 4,
-                    Math.floor(y) * 4,
-                    Math.floor(w) * 4,
-                    Math.floor(h) * 4
+                    Math.floor(x) * (400 / size),
+                    Math.floor(y) * (400 / size),
+                    Math.floor(w) * (400 / size),
+                    Math.floor(h) * (400 / size)
                 );
 
                 this.terrain.drawMap('commercial', Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
@@ -301,10 +257,11 @@ require([
             city.save();
 
             city.once('sync', function () {
+                terrain.set('id', city.id)
+                terrain.save();
+                TERRAINS.add(terrain);
                 CITIES.add(city);
                 ROUTER.navigate('/city/' + city.id, true);
-                terrain.id = city.id;
-                terrain.save();
             });
 
             return false;
