@@ -15,12 +15,13 @@ require([
     'hogan',
     'raphael/raphael.amd',
     'model',
+    'breadcrumb',
     'text!../templates/home.html',
     'text!../templates/navitem.html',
     'text!../templates/city.html'
-], function ($, Backbone, Storage, Hogan, Raphael, Model, $$home, $$navItem, $$city) {
+], function ($, Backbone, Storage, Hogan, Raphael, Model, Breadcrumb, $$home, $$navItem, $$city) {
 
-    var Banana
+    var Banana;
 
     // helper shits
     var socket = io.connect();
@@ -32,23 +33,40 @@ require([
     var Terrain = Model.Terrain;
     var Terrains = Model.Terrains;
 
-    //
-    // COLLECTIONS
-    //
 
-    var CITIES = new Cities;
-    var TERRAINS = new Terrains;
+    var BREADCRUMB = new Breadcrumb;
+
+
+    //
+    //  Router & Breadcrumb
+    //
 
     var Router = Backbone.Router.extend({
+        
         routes: {
             '': 'home',
+            'fuck': 'fuck',
             'city/:id': 'city'
         },
+
+        initialize: function () {
+            $('#nav-container').html(BREADCRUMB.el);
+        },
+
         home: function () {
+
+            BREADCRUMB.home();
+
             var homeView = new HomeView
             $('#main').html(homeView.el);
-            $('input')[0].focus();
+            // $('input')[0].focus();
         },
+
+        fuck: function () {
+
+            BREADCRUMB.fuck();
+        },
+
         city: function (id) {
             var cityView = new CityView({
                 cityID: id
@@ -61,111 +79,111 @@ require([
 
     var ROUTER = new Router;
 
-    var TerrainView = Backbone.View.extend({
-        tagName: ''
-    });
+    // var TerrainView = Backbone.View.extend({
+    //     tagName: ''
+    // });
 
-    var NavItemView = Backbone.View.extend({
-        tagName: 'li',
-        template: Hogan.compile($$navItem),
-        initialize: function () {
-            this.id = 'navitem-' + this.model.id;
-            this.render();
-            this.renderTerrain();
-            this.listenTo(this.model, 'destroy', this.remove);
-        },
-        render: function () {
-            this.$el.html(this.template.render(this.model.toJSON()));
-        },
-        renderTerrain: function () {
-
-
-            var terrain = TERRAINS.get(this.model.id);
-            if (!terrain) return;
-
-            var map = terrain.get('map');
-            var canvas = $('#terrain-' + terrain.id, this.$el).get(0);
-            if (canvas) {
-
-                var ctx = canvas.getContext('2d');
-
-                var residentialColor = "#20A040";
-                var commercialColor = "#296089";
-                var size = 40;
-
-                map.forEach(function (city) {
-
-                    if (city.type === 'residential')
-                        ctx.fillStyle = residentialColor;
-                    else
-                        ctx.fillStyle = commercialColor;
-
-                    ctx.fillRect(
-                        city.x * (100 / size), 
-                        city.y * (100 / size), 
-                        city.w * (100 / size), 
-                        city.h * (100 / size)
-                    );
-                });
-            }
-        }
-    });
-
-    var NavView = Backbone.View.extend({
-        tagName: 'ul',
-        initialize: function () {
-            this.listenTo(CITIES, 'reset', this.render);
-            this.listenTo(CITIES, 'add', this.add);
-            TERRAINS.fetch();
-            CITIES.fetch();
-        },
-        render: function () {
-            var $el = this.$el;
-            CITIES.each(function (city) {
-                var navItemView = new NavItemView({
-                    model: city
-                });
-                $el.append(navItemView.el);
-            });
-        },
-        add: function (model) {
-            var navItemView = new NavItemView({
-                model: model
-            })
-            this.$el.append(navItemView.el);
-        }
-    });
+    // var NavItemView = Backbone.View.extend({
+    //     tagName: 'li',
+    //     template: Hogan.compile($$navItem),
+    //     initialize: function () {
+    //         this.id = 'navitem-' + this.model.id;
+    //         this.render();
+    //         this.renderTerrain();
+    //         this.listenTo(this.model, 'destroy', this.remove);
+    //     },
+    //     render: function () {
+    //         this.$el.html(this.template.render(this.model.toJSON()));
+    //     },
+    //     renderTerrain: function () {
 
 
-    var CityView = Backbone.View.extend({
-        template: Hogan.compile($$city),
-        tagName: 'section',
-        id: 'city',
-        events: {
-            'click #remove-city': 'removeCity'
-        },
-        initialize: function (options) {
-            this.model = CITIES.get(options.cityID);
-            this.render();
-            this.listenTo(this.model, 'change', this.render);
-            this.model.fetch();
-        },
-        render: function () {
-            this.$el.html(this.template.render(this.model.toJSON()));
-            return this;
-        },
-        removeCity: function () {
+    //         var terrain = TERRAINS.get(this.model.id);
+    //         if (!terrain) return;
 
-            var terrain = TERRAINS.get(this.model.id);
-            CITIES.remove(this.model);
-            TERRAINS.remove(terrain);
-            terrain.destroy();
-            this.model.destroy();
+    //         var map = terrain.get('map');
+    //         var canvas = $('#terrain-' + terrain.id, this.$el).get(0);
+    //         if (canvas) {
 
-            ROUTER.navigate('', true);
+    //             var ctx = canvas.getContext('2d');
 
-        }
-    });
+    //             var residentialColor = "#20A040";
+    //             var commercialColor = "#296089";
+    //             var size = 40;
+
+    //             map.forEach(function (city) {
+
+    //                 if (city.type === 'residential')
+    //                     ctx.fillStyle = residentialColor;
+    //                 else
+    //                     ctx.fillStyle = commercialColor;
+
+    //                 ctx.fillRect(
+    //                     city.x * (100 / size), 
+    //                     city.y * (100 / size), 
+    //                     city.w * (100 / size), 
+    //                     city.h * (100 / size)
+    //                 );
+    //             });
+    //         }
+    //     }
+    // });
+
+    // var NavView = Backbone.View.extend({
+    //     tagName: 'ul',
+    //     initialize: function () {
+    //         this.listenTo(CITIES, 'reset', this.render);
+    //         this.listenTo(CITIES, 'add', this.add);
+    //         TERRAINS.fetch();
+    //         CITIES.fetch();
+    //     },
+    //     render: function () {
+    //         var $el = this.$el;
+    //         CITIES.each(function (city) {
+    //             var navItemView = new NavItemView({
+    //                 model: city
+    //             });
+    //             $el.append(navItemView.el);
+    //         });
+    //     },
+    //     add: function (model) {
+    //         var navItemView = new NavItemView({
+    //             model: model
+    //         })
+    //         this.$el.append(navItemView.el);
+    //     }
+    // });
+
+
+    // var CityView = Backbone.View.extend({
+    //     template: Hogan.compile($$city),
+    //     tagName: 'section',
+    //     id: 'city',
+    //     events: {
+    //         'click #remove-city': 'removeCity'
+    //     },
+    //     initialize: function (options) {
+    //         this.model = CITIES.get(options.cityID);
+    //         this.render();
+    //         this.listenTo(this.model, 'change', this.render);
+    //         this.model.fetch();
+    //     },
+    //     render: function () {
+    //         this.$el.html(this.template.render(this.model.toJSON()));
+    //         return this;
+    //     },
+    //     removeCity: function () {
+
+    //         var terrain = TERRAINS.get(this.model.id);
+    //         CITIES.remove(this.model);
+    //         TERRAINS.remove(terrain);
+    //         terrain.destroy();
+    //         this.model.destroy();
+
+    //         ROUTER.navigate('', true);
+
+    //     }
+    // });
 
     var HomeView = Backbone.View.extend({
         template: Hogan.compile($$home),
@@ -182,9 +200,9 @@ require([
         },
         render: function () {
             this.$el.html(this.template.render());
-            this.city = new City;
-            this.terrain = new Terrain;
-            this.generate();
+            // this.city = new City;
+            // this.terrain = new Terrain;
+            // this.generate();
             return this;
         },
         generate: function () {
@@ -282,8 +300,8 @@ require([
     var App = Backbone.View.extend({
        
         initialize: function () {
-            var navView = new NavView;
-            $('#cities').html(navView.el);
+            // var homeView = new HomeView;
+            // $('#cities').html(navView.el);
         },
 
         // enables history api pushstate
@@ -308,8 +326,10 @@ require([
 
     $(function () {
 
+
         var app = new App;
         app.enablePushState();
         app.disableAnchor();
+
     });
 })

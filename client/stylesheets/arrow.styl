@@ -1,0 +1,73 @@
+
+// mixins for the arrows in the breadcrumb
+arrowHead(height, color, width = height / 2)
+
+    position: relative
+    &:after
+        content: ''
+        display: block
+
+        width: 0
+        height: 0
+        border-top: (height / 2) solid transparent
+        border-bottom: (height / 2) solid transparent
+        border-left: (width / 2) solid color
+
+        position: absolute
+
+        margin-top: -(height)
+        left: 100%
+        z-index: 2
+
+        &:hover
+            background: green
+
+noArrowHead()
+    &:after
+        display: none
+
+
+arrowButt(height, color, borderWidth = 1px, width = height / 2)
+
+    position: relative
+    border-left: borderWidth solid color
+
+    &:before
+
+        content: ''
+        display: block
+
+        width: 0
+        height: 0
+        border-top: (height / 2) solid transparent
+        border-bottom: (height / 2) solid transparent
+        border-left: (width / 2) solid color
+
+        position: absolute
+        left: 0%
+        z-index: 1
+        
+noArrowButt()
+    &:before
+        display: none
+
+arrowHeadColor(color)
+    
+    &:after
+        border-left-color: color !important
+
+arrowFirstButt(paddingLeft = inherit)
+    
+
+    &:first-of-type
+
+        border-left: none
+        padding-left: paddingLeft
+        &:before
+            display: none
+
+
+arrowLastHead()
+    &:last-of-type
+        width: 0
+        padding: 0
