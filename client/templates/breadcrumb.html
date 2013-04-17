@@ -1,5 +1,20 @@
-<a id="header" {{^crumbs}}class="no-arrow"{{/crumbs}} href="/fuck"><h1><i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle-blank"></i> TUBE <i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle"></i></h1></a>
+
 {{#crumbs}}
-    <a href="{{href}}">{{content}}</a>
+    <a class="button" href="{{href}}">{{content}}</a>
 {{/crumbs}}
-<a>asdfsf</a>
+{{#home}}
+    <a class="button no-arrow primary" id="header" href="/"><h1><i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle-blank"></i> TUBE <i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle"></i></h1></a>
+    <a class="button no-arrow" href="/create">create</a>
+    <a class="button no-arrow" href="/about">about</a>
+{{/home}}
+{{#create}}
+    <a class="button no-arrow" id="header" href="/"><h1><i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle-blank"></i> TUBE <i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle"></i></h1></a>
+    <a class="button no-arrow primary" href="/create">create</a>
+    <a class="button no-arrow" href="/about">about</a>
+{{/create}}
+{{#about}}
+    <a class="button no-arrow" id="header" href="/"><h1><i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle-blank"></i> TUBE <i class="icon-circle-blank"></i><i class="icon-minus"></i><i class="icon-circle"></i></h1></a>
+    <a class="button no-arrow" href="/create">create</a>
+    <a class="button no-arrow primary" href="/about">about</a>
+{{/about}}
+<a></a>

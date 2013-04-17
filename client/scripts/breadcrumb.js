@@ -11,7 +11,6 @@ define([
         id: 'nav',
 
         initialize: function () {
-            console.log('init bread');
             this.render();
         },
 
@@ -21,18 +20,20 @@ define([
         },
 
         home: function () {
-            this.$el.html(this.template.render());
+            this.$el.html(this.template.render({
+                home: true
+            }));
         },
 
-        fuck: function () {
+        create: function () {
             this.$el.html(this.template.render({
-                crumbs: [{
-                    href: '/',
-                    content: 'you'
-                },{
-                    href: '/',
-                    content: 'you'
-                }]
+                create: true
+            }));
+        },
+
+        about: function () {
+            this.$el.html(this.template.render({
+                about: true
             }));
         }
     });

@@ -37,7 +37,9 @@ app.use(function (req, res, next) {
     if (notStatic)
         req.url = '/';
 
-    next();
+    // setTimeout(function () {
+        next();
+    // }, 3000);
 });
 
 app.use(express.static(__dirname + './../client'));
