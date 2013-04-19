@@ -41,18 +41,17 @@ $marble = #EEE
 //  ELEMENTAL
 //
 
-
+mask()
+    -webkit-mask-image: url(/images/grunge.png)
+    -moz-mask-image: url(/images/grunge.png)
+    mask-image: url(/images/grunge.png)
+    
 
 html
 body
     height: 100%
     font-family: 'Tauri'
     text-transform: uppercase
-    -webkit-mask-image: url(/images/grunge.png)
-    -moz-mask-image: url(/images/grunge.png)
-    mask-image: url(/images/grunge.png)
-
-#main-container
     height: 100%
 
 a
@@ -73,6 +72,10 @@ h2
     background: $gray
     padding: 0 40px
 
+input
+    border: none
+    &:focus
+        outline: none
 
 //
 //  BUTTON
@@ -103,18 +106,17 @@ $navItemPrimaryBackground = $blue
 $navItemHoverBackground = $blueL
 
 #nav-container
-
-
     position: fixed
     width: 100%
     height: $navHeight
     padding: 20px 0
     background: $navContainerBackground
+    mask()
 
 #nav
 
-
-    margin: 0 20px
+    width: 1000px
+    margin: 0 auto
     overflow: hidden
     background: $navBackground
 
@@ -154,6 +156,22 @@ $navItemHoverBackground = $blueL
         &:last-of-type
             display: none
    
+//
+//  CREATE
+//
+
+$mapSize = 400px
+
+#create-map
+    width: $mapSize
+    height: $mapSize
+    float: left
+
+    canvas
+        background: $marble
+
+        mask()
+
 
 
 #cities
@@ -194,4 +212,8 @@ $navItemHoverBackground = $blueL
                 height: 80px
                 background: white
 #main-container
-    padding: 100px 20px 20px
+    padding: 130px 20px 20px
+
+#main
+    width: 1000px
+    margin: 0 auto

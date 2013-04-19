@@ -16,9 +16,10 @@ require([
     'raphael/raphael.amd',
     'model',
     'breadcrumb',
+    'map',
     'text!../templates/cityitem.html',
     'text!../templates/create.html',
-], function ($, Backbone, Storage, Hogan, Raphael, Model, Breadcrumb, $$cityItem, $$create) {
+], function ($, Backbone, Storage, Hogan, Raphael, Model, Breadcrumb, Map, $$cityItem, $$create) {
 
     // helper shits
     var socket = io.connect();
@@ -67,59 +68,57 @@ require([
 
     var ROUTER = new Router;
 
-    // var TerrainView = Backbone.View.extend({
-    //     tagName: ''
-    // });
-
-    // var NavItemView = Backbone.View.extend({
-    //     tagName: 'li',
-    //     template: Hogan.compile($$navItem),
-    //     initialize: function () {
-    //         this.id = 'navitem-' + this.model.id;
-    //         this.render();
-    //         this.renderTerrain();
-    //         this.listenTo(this.model, 'destroy', this.remove);
-    //     },
-    //     render: function () {
-    //         this.$el.html(this.template.render(this.model.toJSON()));
-    //     },
-    //     renderTerrain: function () {
-
-
-    //         var terrain = TERRAINS.get(this.model.id);
-    //         if (!terrain) return;
-
-    //         var map = terrain.get('map');
-    //         var canvas = $('#terrain-' + terrain.id, this.$el).get(0);
-    //         if (canvas) {
-
-    //             var ctx = canvas.getContext('2d');
-
-    //             var residentialColor = "#20A040";
-    //             var commercialColor = "#296089";
-    //             var size = 40;
-
-    //             map.forEach(function (city) {
-
-    //                 if (city.type === 'residential')
-    //                     ctx.fillStyle = residentialColor;
-    //                 else
-    //                     ctx.fillStyle = commercialColor;
-
-    //                 ctx.fillRect(
-    //                     city.x * (100 / size), 
-    //                     city.y * (100 / size), 
-    //                     city.w * (100 / size), 
-    //                     city.h * (100 / size)
-    //                 );
-    //             });
-    //         }
-    //     }
-    // });
-
-
     var CreateView = Backbone.View.extend({
+        canvasSize: 400,
         template: Hogan.compile($$create),
+        initialize: function () {
+            this.render();
+        },
+
+        render: function () {
+            this.$el.html(this.template.render());
+            this.map = new Map;
+            this.map.generate();
+            this.renderMap();
+        },
+
+        renderMap: function () {
+            var canvas = $('#create-map canvas', this.$el).get(0);
+            if (canvas) {
+
+                var ctx = canvas.getContext('2d');
+
+                var size        = this.map.get('size');
+                var population  = this.map.get('population');
+                var mapIn       = this.map.get('mapIn');
+                var mapOut      = this.map.get('mapOut');
+                var tileSize = this.canvasSize / size;
+                // ctx.fillStyle = "hsla(210, 70%, 70%, 1)";
+
+                for (var y = 0; y < size; y++) {
+                    for (var x = 0; x < size; x++) {
+                        var offset = y * size + x;
+                        var populationIn = mapIn[offset];
+                        var populationOut = mapOut[offset];
+
+                        if (populationIn + populationOut == 0) {
+                            ctx.fillStyle = "none";
+                        } else {
+                            var hue = 0 + 120 * ((populationOut) / (populationIn + populationOut));
+                            var strength = (populationIn + populationOut) / 200;
+                            ctx.fillStyle = "hsla(" + hue + ", 80%, 70%, " + strength +")";
+                        }
+                        ctx.fillRect(
+                            tileSize * x, 
+                            tileSize * y, 
+                            tileSize,
+                            tileSize
+                        );
+                    }
+                }
+            }
+
+        }
     });
 
     var CityItemView = Backbone.View.extend({
@@ -196,7 +195,6 @@ require([
                 return false;
             });
         },
-
     });
 
     $(function () {
@@ -205,6 +203,5 @@ require([
         var app = new App;
         app.enablePushState();
         app.disableAnchor();
-
     });
 })
