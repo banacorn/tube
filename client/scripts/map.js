@@ -3,12 +3,12 @@ define([
 ], function (Backbone) {
     return Backbone.Model.extend({
         defaults: {
-            size: 40,
+            size: 6,
             population: 0,
             mapIn: [],
             mapOut: []
         },
-        generate: function () {
+        generate: function (core) {
 
             var size = this.get('size');
             var mapIn = new Uint16Array(size * size);
@@ -18,18 +18,22 @@ define([
 
             // patch squares on map
             // e.g. patch(mapIn, 100, 0, 0, 4, 4);
-            var patch = function (map, n, x, y, w, h) {
+            var patch = function (out, n, x, y, w, h) {
 
                 // boundary check
                 w = x + w > size ? size - x : w;
                 h = y + h > size ? size - y : h;
 
                 // tweak population
-                if (n < 0) {
-                    n = -n;
-                    populationOut += n * w * h;
-                } else {
-                    populationIn += n * w * h;
+                for (var j = 0; j < h; j++) {
+                    for (var i = 0; i < w; i++) {
+                        var offset = size * y + x + w * j + i;
+                        if (out) {
+                            populationOut += n - mapOut[offset];
+                        } else {
+                            populationIn += n - mapIn[offset];
+                        }
+                    }
                 }
 
                 // row
@@ -39,10 +43,12 @@ define([
                 // set rows
                 for (var i = 0; i < h; i++) {
                     var offset = size * (y + i) + x; 
-                    map.set(row, offset);
+                    if (out)
+                        mapOut.set(row, offset);
+                    else
+                        mapIn.set(row, offset);
                 }
-                return map;
-            }
+            };
 
             // normal distribution
             var normalverteilung = function (times) {
@@ -52,11 +58,20 @@ define([
                     r += Math.random();
                 };
                 return r / times;
+            };
+
+            var scale = function (r) {
+                return Math.floor(r * size);
             }
 
-            console.log(normalverteilung())
+            var core = function () {
+                var coreX = scale(normalverteilung(2));
+                var coreY = scale(normalverteilung(2));
 
-            var randomPatch = function (out) {
+                console.log(coreX, coreY);
+            };
+
+            var randomPatch = function (out, x, y) {
 
                 var r = Math.random();
 
@@ -74,8 +89,8 @@ define([
                     var factor = 0.4;
                 }
 
-                var x = Math.floor(Math.random() * size);
-                var y = Math.floor(Math.random() * size);
+                var x = x || Math.floor(Math.random() * size);
+                var y = y || Math.floor(Math.random() * size);
                 var w = Math.floor(Math.random() * size * factor);
                 var h = Math.floor(Math.random() * w * 2);
                 
@@ -85,40 +100,54 @@ define([
                     mapIn = patch(mapIn, population, x, y, w, h);
             }
 
-            // random stage
-            // seed until pOut > pIn
-            // then make up the difference with pIn hotpoint 
-            var round = 30;
+            // // random stage
+            // // seed until pOut > pIn
+            // // then make up the difference with pIn hotpoint 
+            // var round = 30;
 
-            // in
-            for (var i = 0; i < round; i++) {
-                randomPatch(false);
-            }
+            // // in
+            // for (var i = 0; i < round; i++) {
+            //     randomPatch(false);
+            // }
 
-            // out
-            while (populationOut < populationIn) {
-                randomPatch(true);
-            }
+            // // out
+            // while (populationOut < populationIn) {
+            //     randomPatch(true);
+            // }
 
-            // in
-            while (true) {
-                var x = Math.floor(Math.random() * size);
-                var y = Math.floor(Math.random() * size);
-                var difference = populationOut - populationIn;
-                if (difference == 0)
-                    break;
-                else if (difference < 1000) {
-                    mapIn.set([difference], y * size + x);
-                    populationIn += difference;
-                } else {
-                    mapIn.set([difference], y * size + x);
-                    populationIn += 1000;
-                }
-            }
+            // // in
+            // while (true) {
+            //     var x = Math.floor(Math.random() * size);
+            //     var y = Math.floor(Math.random() * size);
+            //     var difference = populationOut - populationIn;
+            //     if (difference == 0)
+            //         break;
+            //     else if (difference < 1000) {
+            //         mapIn.set([difference], y * size + x);
+            //         populationIn += difference;
+            //     } else {
+            //         mapIn.set([difference], y * size + x);
+            //         populationIn += 1000;
+            //     }
+            // }
+
+            // patch(true, 100, 1, 1, 2, 2);
+            // patch(true, 100, 2, 2, 2, 2);
+            // patch(true, 200, 3, 3, 3, 3);
+
+
+
+            // console.log('population in', populationIn);
+            // console.log('population out', populationOut);
+            // console.log(mapIn);
+            // console.log(mapOut);
+
+            core();
 
             this.set('population', populationIn);
             this.set('mapIn', mapIn);
             this.set('mapOut', mapOut);
+
         }
     });
 });

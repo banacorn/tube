@@ -78,7 +78,7 @@ require([
         render: function () {
             this.$el.html(this.template.render());
             this.map = new Map;
-            this.map.generate();
+            this.map.generate(1);
             this.renderMap();
         },
 
