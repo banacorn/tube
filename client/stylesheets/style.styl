@@ -1,6 +1,9 @@
 @import 'nib/reset'
 @import 'font-awesome.css'
 @import 'arrow'
+@import 'color'
+
+@import 'structure'
 
 @font-face
   font-family: 'Tauri'
@@ -8,34 +11,10 @@
   font-weight: 400
   src: local('Tauri Regular'), local('Tauri-Regular'), url('/fonts/Tauri.woff') format('woff')
 
+$color = $pomegranate
 
 global-reset()
 html5-reset()
-
-
-//
-//  VARIABLES
-//
-
-$blue = #296089
-$blueL = lighten($blue, 10%)
-$blueD = darken($blue, 10%)
-
-$red = #C0392B
-$redL = lighten($red, 10%)
-$redD = darken($red, 10%)
-
-$gold = darken(gold, 5%)
-$goldL = gold
-$goldD = darken(gold, 15%)
-
-$green = #472 
-
-$gray = #333
-$grayL = #444
-$grayXL = #888
-$cloud = #AAA
-$marble = #EEE
 
 //
 //  ELEMENTAL
@@ -53,167 +32,36 @@ body
     font-family: 'Tauri'
     text-transform: uppercase
     height: 100%
+    background: $clouds
+    color: $concrete
 
+    text-shadow 2px 2px 1px white !important
 a
     text-decoration: none
     color: inherit
 
 
-
-p
-    padding: 0 40px
-
-h2
-    height: 60px
-    line-height: 60px
-    margin-bottom: 10px
-    font-size: 150%
-    color: white
-    background: $gray
-    padding: 0 40px
+nav
+    list-style: none
 
 input
     border: none
-    &:focus
-        outline: none
+    background: inherit
+    font-family: 'Tauri'
+  &:focus
+    outline: none
+    outline-color: transparent
 
-//
-//  BUTTON
-//
+button
+    font-family: 'Tauri'
 
-$buttonHeight = 50px
-
-.button
-    display: block
-    height: $buttonHeight
-    float: left
-
-    background: $red
-    line-height: $buttonHeight
+    border: none
+    color: $concrete
+    background: inherit
+    font-size: inherit
+    padding: 10px
+    margin-right: 10px
+    text-transform: uppercase
     cursor: pointer
-    color: white
-
-
-//
-//  NAV
-//
-
-$navHeight = 50px
-$navContainerBackground = $marble
-$navBackground = $marble
-$navItemBackground = $grayXL
-$navItemPrimaryBackground = $blue
-$navItemHoverBackground = $blueL
-
-#nav-container
-    position: fixed
-    width: 100%
-    height: $navHeight
-    padding: 20px 0
-    background: $navContainerBackground
-    mask()
-
-#nav
-
-    width: 1000px
-    margin: 0 auto
-    overflow: hidden
-    background: $navBackground
-
-    a
-        background: $navItemBackground
-        arrowHead($navHeight, $navItemBackground)
-        arrowButt($navHeight, $navContainerBackground, 12px)
-        arrowFirstButt(20px)
-        arrowLastHead()
-        padding: 0 15px 0 30px
-        font-size: 120%
-        color: white
-
-
-        &.no-arrow
-            noArrow()
-            padding: 0 15px
-            background: $grayXL
-
-        &#header
-            padding: 0
-            h1
-                padding: 0 20px
-            i
-                font-size: 75%
-                margin: 0 -1px
-
-
-        &.primary
-            background: $navItemPrimaryBackground
-            arrowHeadColor($navItemPrimaryBackground)
-
-        &:hover
-            background: $navItemHoverBackground
-            arrowHeadColor($navItemHoverBackground)
-
-        &:last-of-type
-            display: none
-   
-//
-//  CREATE
-//
-
-$mapSize = 400px
-
-#create-map
-    width: $mapSize
-    height: $mapSize
-    float: left
-
-    canvas
-        background: $marble
-
-        mask()
-
-
-
-#cities
-    padding-bottom: 40px
-    a
-        overflow: hidden
-        display: block
-        margin: 10px 0
-        padding: 10px
-        background: $marble
-
-        &:hover
-            background: $red
-            .city-info
-                color: white
-                small
-                    color: $marble
-
-        .city-info
-            width: 100px
-            height: 40px
-            padding: 20px 20px
-            display: block
-            float: left
-            font-size: 120%
-            color: $red
-            small
-                font-size: 75%
-                color: $gray
-        .city-map
-            width: 80px
-            height: 80px
-            display: block
-            float: left
-
-            canvas
-                width: 80px
-                height: 80px
-                background: white
-#main-container
-    padding: 130px 20px 20px
-
-#main
-    width: 1000px
-    margin: 0 auto
+    &:hover
+      color: $color

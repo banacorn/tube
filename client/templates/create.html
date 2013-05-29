@@ -1,13 +1,17 @@
 <div id="create-map">
-    <canvas width="400" height="400">
+    <canvas width="500" height="500"></canvas>
 </div>
 <div id="create-form">
     <form>
         <div>
-            <!-- <label>NAME</label><input type="text"> -->
+            <label>name</label><input id="input-name" type="text" value="Untitled" required placeholder="enter name here">
         </div>
         <div>
-        <!-- <label>POPULATION</label><input type="text"> -->
+            <label>POPULATION</label><input id="input-population" value="0" type="text" disabled>
         </div>
+        <div id="button-group">
+            <button id="button-create"><i class="icon-ok"></i> Create</button><button id="button-regenerate"><i class="icon-refresh"></i> Regenerate</button><button id="button-layer"><i class="icon-eye-open"></i> In + Out</button></button>
+        </div>
+
     </form>
 </div>

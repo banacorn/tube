@@ -1,0 +1,100 @@
+@import 'color'
+
+$navHeight = 100px
+$padding = 100px
+
+$color = $pomegranate
+
+//
+//  Main
+//
+
+#nav
+    height: $navHeight
+    padding: 0 $padding
+    background: rgba(236, 240, 241, 0.5)
+
+    color: $concrete
+    overflow: hidden
+
+#main
+    background: $clouds
+    padding: 0 $padding
+
+//
+//  Nav
+//
+
+#nav > header
+#nav > li
+
+    float: left
+
+    height: $navHeight
+    margin-right: 40px
+
+    line-height: $navHeight
+
+    font-size: 100%
+    text-align: center
+
+    cursor: pointer
+
+    &:hover
+        background: $clouds
+        color: $color
+
+#nav > header
+    font-size: 200%
+
+//
+//  City
+//
+
+.city
+    float: left
+    width: 300px
+    height: 200px
+    margin: 20px 20px 20px 0
+    padding: 20px
+
+    background: darken($clouds, 10%)
+    color: $concrete
+
+    &:hover
+        background: $color
+        color: white
+
+//
+//  Create
+//
+
+$canvasSize = 500px
+
+#create-map
+    float: left
+    width: $canvasSize 
+    canvas
+        background: white
+        margin-bottom: 10px
+
+#create-form
+    float: left
+    padding-left: 40px
+    
+    font-size: 150%
+
+    form > div
+        height: 60px
+        line-height: 60px
+
+    input
+        margin-left: 20px
+        font-size: inherit
+        text-transform: uppercase
+
+        color: $color
+
+#button-group
+    top: 540px
+    position: absolute

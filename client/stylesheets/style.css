@@ -1,4 +1,17 @@
 @import 'font-awesome.css';
+#nav{height:100px;padding:0 100px;background:rgba(236,240,241,0.5);color:#95a5a6;overflow:hidden}
+#main{background:#ecf0f1;padding:0 100px}
+#nav > header,#nav > li{float:left;height:100px;margin-right:40px;line-height:100px;font-size:100%;text-align:center;cursor:pointer;}
+#nav > header:hover,#nav > li:hover{background:#ecf0f1;color:#c0392b}
+#nav > header{font-size:200%}
+.city{float:left;width:300px;height:200px;margin:20px 20px 20px 0;padding:20px;background:#d1dadd;color:#95a5a6;}
+.city:hover{background:#c0392b;color:#fff}
+#create-map{float:left;width:500px;}
+#create-map canvas{background:#fff;margin-bottom:10px}
+#create-form{float:left;padding-left:40px;font-size:150%;}
+#create-form form > div{height:60px;line-height:60px}
+#create-form input{margin-left:20px;font-size:inherit;text-transform:uppercase;color:#c0392b}
+#button-group{top:540px;position:absolute}
 @font-face{font-family:'Tauri';font-style:normal;font-weight:400;src:local('Tauri Regular'),local('Tauri-Regular'),url("/fonts/Tauri.woff") format('woff')}
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-family:inherit;font-size:100%;vertical-align:baseline}
 body{line-height:1;color:#000;background:#fff}
@@ -6,43 +19,10 @@ ol,ul{list-style:none}
 table{border-collapse:separate;border-spacing:0;vertical-align:middle}
 caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
 a img{border:none}
-html,body{height:100%;font-family:'Tauri';text-transform:uppercase;height:100%}
+html,body{height:100%;font-family:'Tauri';text-transform:uppercase;height:100%;background:#ecf0f1;color:#95a5a6;text-shadow:2px 2px 1px #fff !important}
 a{text-decoration:none;color:inherit}
-p{padding:0 40px}
-h2{height:60px;line-height:60px;margin-bottom:10px;font-size:150%;color:#fff;background:#333;padding:0 40px}
-input{border:none;}
-input:focus{outline:none}
-.button{display:block;height:50px;float:left;background:#c0392b;line-height:50px;cursor:pointer;color:#fff}
-#nav-container{position:fixed;width:100%;height:50px;padding:20px 0;background:#eee;-webkit-mask-image:url("/images/grunge.png");-moz-mask-image:url("/images/grunge.png");mask-image:url("/images/grunge.png")}
-#nav{width:1000px;margin:0 auto;overflow:hidden;background:#eee;}
-#nav a{background:#888;position:relative;position:relative;border-left:12px solid #eee;padding:0 15px 0 30px;font-size:120%;color:#fff;}
-#nav a:after{content:'';display:block;width:0;height:0;border-top:25px solid transparent;border-bottom:25px solid transparent;border-left:12.5px solid #888;position:absolute;margin-top:-50px;left:100%;z-index:2;}
-#nav a:after:hover{background:#008000}
-#nav a:before{content:'';display:block;width:0;height:0;border-top:25px solid transparent;border-bottom:25px solid transparent;border-left:12.5px solid #eee;position:absolute;left:0%;z-index:1}
-#nav a:first-of-type{border-left:none;padding-left:20px;}
-#nav a:first-of-type:before{display:none}
-#nav a:last-of-type{width:0;padding:0}
-#nav a.no-arrow{padding:0 15px;background:#888}
-#nav a.no-arrow:after{display:none}
-#nav a.no-arrow:before{display:none}
-#nav a#header{padding:0;}
-#nav a#header h1{padding:0 20px}
-#nav a#header i{font-size:75%;margin:0 -1px}
-#nav a.primary{background:#296089;}
-#nav a.primary:after{border-left-color:#296089 !important}
-#nav a:hover{background:#3172a3;}
-#nav a:hover:after{border-left-color:#3172a3 !important}
-#nav a:last-of-type{display:none}
-#create-map{width:400px;height:400px;float:left;}
-#create-map canvas{background:#eee;-webkit-mask-image:url("/images/grunge.png");-moz-mask-image:url("/images/grunge.png");mask-image:url("/images/grunge.png")}
-#cities{padding-bottom:40px;}
-#cities a{overflow:hidden;display:block;margin:10px 0;padding:10px;background:#eee;}
-#cities a:hover{background:#c0392b;}
-#cities a:hover .city-info{color:#fff;}
-#cities a:hover .city-info small{color:#eee}
-#cities a .city-info{width:100px;height:40px;padding:20px 20px;display:block;float:left;font-size:120%;color:#c0392b;}
-#cities a .city-info small{font-size:75%;color:#333}
-#cities a .city-map{width:80px;height:80px;display:block;float:left;}
-#cities a .city-map canvas{width:80px;height:80px;background:#fff}
-#main-container{padding:130px 20px 20px}
-#main{width:1000px;margin:0 auto}
+nav{list-style:none}
+input{border:none;background:inherit;font-family:'Tauri'}
+&:focus{outline:none;outline-color:transparent}
+button{font-family:'Tauri';border:none;color:#95a5a6;background:inherit;font-size:inherit;padding:10px;margin-right:10px;text-transform:uppercase;cursor:pointer;}
+button:hover{color:#c0392b}

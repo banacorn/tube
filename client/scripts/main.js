@@ -15,11 +15,10 @@ require([
     'hogan',
     'raphael/raphael.amd',
     'model',
-    'breadcrumb',
     'map',
     'text!../templates/cityitem.html',
     'text!../templates/create.html',
-], function ($, Backbone, Storage, Hogan, Raphael, Model, Breadcrumb, Map, $$cityItem, $$create) {
+], function ($, Backbone, Storage, Hogan, Raphael, Model, Map, $$cityItem, $$create) {
 
     // helper shits
     var socket = io.connect();
@@ -27,7 +26,6 @@ require([
 
     // alias
     var CITIES = new Model.Cities;
-    var BREADCRUMB = new Breadcrumb;
 
 
     //
@@ -43,57 +41,70 @@ require([
         },
 
         initialize: function () {
-            $('#nav-container').html(BREADCRUMB.el);
         },
 
         home: function () {
 
-            BREADCRUMB.home();
-
             var cityListView = new CityListView
             $('#main').html(cityListView.el);
+
         },
 
         create: function () {
-            BREADCRUMB.create();
 
             var createView = new CreateView
             $('#main').html(createView.el);
         },
 
         about: function () {
-            BREADCRUMB.about();
         }
     });
 
     var ROUTER = new Router;
 
     var CreateView = Backbone.View.extend({
-        canvasSize: 400,
+        canvasSize: 500,
         template: Hogan.compile($$create),
+
+        events: {
+            'click #button-regenerate': 'generateMap',
+            'click #button-layer': 'changeLayer',
+            'click #button-create': 'saveMap',
+            'focus #input-name': 'focusNameInput',
+            'submit #create-form': 'submit'
+        },
+
         initialize: function () {
+            this.map = new Map;
+            this.listenTo(this.map, 'generated', this.renderMap);
+            this.listenTo(this.map, 'change:layer', this.renderMap);
+            this.listenTo(this.map, 'change:layer', this.renderLayerButton);
+            this.listenTo(this.map, 'change:population', this.showPopulation);
             this.render();
         },
 
         render: function () {
             this.$el.html(this.template.render());
-            this.map = new Map;
+            this.generateMap();
+        },
+
+        generateMap: function () {
             this.map.generate(1);
-            this.renderMap();
         },
 
         renderMap: function () {
             var canvas = $('#create-map canvas', this.$el).get(0);
             if (canvas) {
-
                 var ctx = canvas.getContext('2d');
 
+                ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
                 var size        = this.map.get('size');
                 var population  = this.map.get('population');
                 var mapIn       = this.map.get('mapIn');
                 var mapOut      = this.map.get('mapOut');
-                var tileSize = this.canvasSize / size;
-                // ctx.fillStyle = "hsla(210, 70%, 70%, 1)";
+                var tileSize    = this.canvasSize / size;
+                var layer       = this.map.get('layer') || 'both';
+
 
                 for (var y = 0; y < size; y++) {
                     for (var x = 0; x < size; x++) {
@@ -104,9 +115,21 @@ require([
                         if (populationIn + populationOut == 0) {
                             ctx.fillStyle = "none";
                         } else {
-                            var hue = 0 + 120 * ((populationOut) / (populationIn + populationOut));
-                            var strength = (populationIn + populationOut) / 200;
-                            ctx.fillStyle = "hsla(" + hue + ", 80%, 70%, " + strength +")";
+                            var base = 4000;
+                            switch (layer) {
+                                case "both":
+                                    var population = populationIn + populationOut;
+                                    break;
+                                case "in":
+                                    var population = populationIn;
+                                    break;
+                                case "out":
+                                    var population = populationOut;
+                                    break;
+                            }
+                            var hue = 120 - 120 * population / base;
+                            var transparancy = population == 0 ? 0 : population / base + 0.5;
+                            ctx.fillStyle =  "hsla(" + hue + ", 80%, 70%, " + transparancy +")";
                         }
                         ctx.fillRect(
                             tileSize * x, 
@@ -116,18 +139,67 @@ require([
                         );
                     }
                 }
+
             }
 
+        },
+
+        showPopulation: function () {
+            var population = this.map.get('population');
+            $('#input-population', this.$el).val(population);
+        },
+
+        changeLayer: function () {
+            var layer = this.map.get('layer');
+            switch (layer) {
+                case "both":
+                    this.map.set('layer', 'in');
+                    break;
+                case "in":
+                    this.map.set('layer', 'out');
+                    break;
+                case "out":
+                    this.map.set('layer', 'both');
+                    break;
+            }
+        },
+
+        renderLayerButton: function () {
+            switch (this.map.get('layer')) {
+                case "both":
+                    var content = '<i class="icon-eye-open"></i> In + Out'
+                    break;
+                case "in":
+                    var content = '<i class="icon-eye-open"></i> In      '
+                    break;
+                case "out":
+                    var content = '<i class="icon-eye-open"></i> Out      '
+                    break;
+            }
+            $('#button-layer', this.$el).html(content)
+        },
+
+        submit: function () {
+            console.log('submit')
+        },
+
+        saveMap: function () {
+            this.map.save();
+        },
+
+        focusNameInput: function () {
+            setTimeout(function () {
+
+                $('#input-name', this.$el).select();
+            }, 0);
         }
     });
 
     var CityItemView = Backbone.View.extend({
         template: Hogan.compile($$cityItem),
         tagName: 'li',
-
+        className: 'city',
         initialize: function () {
-            // console.log('city inited');
-            // console.log(this.model);
             this.render();
         },
 
@@ -144,9 +216,8 @@ require([
 
         initialize: function () {
             this.listenTo(CITIES, 'add', this.add);
-            // this.listenTo(CITIES, 'remove', this.remove);
+            this.listenTo(CITIES, 'remove', this.remove);
             CITIES.fetch();
-            console.log(CITIES.models);
             this.render();
         },
 
@@ -160,12 +231,12 @@ require([
         render: function () {
             this.$el.html();
             var $el = this.$el;
-            CITIES.models.forEach(function (city) {
-                var cityItemView = new CityItemView({
-                    model: city
-                });
-                $el.append(cityItemView.el);
-            });
+            // CITIES.models.forEach(function (city) {
+            //     var cityItemView = new CityItemView({
+            //         model: city
+            //     });
+            //     $el.append(cityItemView.el);
+            // });
             return this;
         }
     });
@@ -174,8 +245,6 @@ require([
     var App = Backbone.View.extend({
        
         initialize: function () {
-            // var homeView = new HomeView;
-            // $('#cities').html(navView.el);
         },
 
         // enables history api pushstate
@@ -195,6 +264,14 @@ require([
                 return false;
             });
         },
+
+
+        // disables form submits
+        disableFormSubmit: function () {
+            $(document).on('submit', 'form', function () {
+                return false;
+            });
+        },
     });
 
     $(function () {
@@ -203,5 +280,6 @@ require([
         var app = new App;
         app.enablePushState();
         app.disableAnchor();
+        app.disableFormSubmit();
     });
 })

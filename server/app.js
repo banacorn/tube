@@ -37,9 +37,7 @@ app.use(function (req, res, next) {
     if (notStatic)
         req.url = '/';
 
-    // setTimeout(function () {
-        next();
-    // }, 3000);
+    next();
 });
 
 app.use(express.static(__dirname + './../client'));
@@ -92,6 +90,7 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
             // POST
             app.post(url(model), function (req, res) {
                 var data = req.body;
+                console.log(data)
                 db.get(key(model, 'id'), function (err, id) {
                     if (err) throw err;
                     db.hmset(key(model, id), stringifyHash(_.extend(data, {
@@ -156,145 +155,5 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
 var port = createPort(app, db, 'api', 'tubes');
 
 port('city');
-port('terrain');
+// port('terrain');
 
-
-
-// CITY
-
-// app.post('/api/city', function (req, res) {
-
-//     var payload = req.body;
-//     db.get('tubes:city:id', function (err, id) {
-//         if (err) throw err;
-
-//         db.hmset('tubes:city:' + id, {
-//             id: id,
-//             name: payload.name,
-//             population: payload.population.toString()
-//         });
-
-//         res.json({
-//             id: id
-//         });
-
-//         db.sadd('tubes:city', id);
-
-//         db.incr('tubes:city:id');
-//     });
-
-
-
-// });
-
-// app.get('/api/city', function (req, res) {
-
-//     db.smembers('tubes:city', function (err, data) {
-//         if (err) throw err;
-//         async.map(data, function (id, callback) {
-//             db.hgetall('tubes:city:' + id, function (err, data) {
-//                 callback(err, {
-//                     name: data.name,
-//                     population: parseInt(data.population, 10),
-//                     id: parseInt(id, 10)
-//                 });
-//             });
-//         }, function(err, results){
-//             if (err) throw err;
-//             res.json(results);
-//         });
-//     });
-
-// });
-
-
-// app.get('/api/city/:id', function (req, res) {
-
-//     var id = req.params.id;
-
-//     db.hgetall('tubes:city:' + id, function (err, data) {
-//         if (err) throw err;
-//         if (data) {
-//             res.json({
-//                 name: data.name,
-//                 population: parseInt(data.population, 10),
-//                 id: parseInt(id, 10)
-//             });
-//         } else {
-//             res.send(404, 'Sorry, we cannot find that!');
-//         }
-//     });
-// });
-
-
-
-// app.delete('/api/city/:id', function (req, res) {
-
-//     var id = req.params.id;
-
-//     db.del('tubes:city:' + id);
-//     db.srem('tubes:city', id);
-
-// });
-
-// // TERRAIN
-
-
-
-// app.get('/api/terrain/:id', function (req, res) {
-//     var id = req.params.id;
-//     db.hgetall('tubes:terrain:' + id, function (err, data) {
-//         if (err) throw err;
-//         if (data) {
-//             res.json(parseHash(data));
-//         } else {
-//             res.send(404, 'Sorry, we cannot find that!');
-//         }
-//     });
-// });
-
-// app.get('/api/terrain', function (req, res) {
-//     db.smembers('tubes:terrain', function (err, data) {
-//         if (err) throw err;
-//         async.map(data, function (id, callback) {
-//             db.hgetall('tubes:terrain:' + id, callback);
-//         }, function(err, results){
-//             if (err) throw err;
-//             res.json(results.map(parseHash));
-//         });
-//     });
-// });
-
-// app.post('/api/terrain', function (req, res) {
-
-//     var payload = req.body;
-
-//     db.hmset('tubes:terrain:' + payload.id, stringifyHash(payload));
-//     res.json({
-//         id: payload.id
-//     });
-//     db.sadd('tubes:terrain', payload.id);
-// });
-
-
-// app.put('/api/terrain/:id', function (req, res) {
-
-//     var payload = req.body;
-//     var id = req.params.id;
-
-//     db.hmset('tubes:terrain:' + id, stringifyHash(payload));
-//     res.json({
-//         id: id
-//     });
-//     db.sadd('tubes:terrain', id);
-// });
-
-
-// app.delete('/api/terrain/:id', function (req, res) {
-
-//     var id = req.params.id;
-
-//     db.del('tubes:terrain:' + id);
-//     db.srem('tubes:terrain', id);
-
-// });

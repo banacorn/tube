@@ -1,12 +1,23 @@
 define([
+    'gaussian',
     'backbone',
-], function (Backbone) {
+], function (gaussian, Backbone) {
+
+    var normal = function (mean, deviation) {
+        mean = mean || 0;
+        deviation = deviation || 1;
+        return gaussian(mean, deviation).ppf(Math.random());
+    };
+
     return Backbone.Model.extend({
+        urlRoot: '/api/city',
         defaults: {
-            size: 6,
+            name: 'untitled',
+            size: 40,
             population: 0,
             mapIn: [],
-            mapOut: []
+            mapOut: [],
+            layer: 'both'
         },
         generate: function (core) {
 
@@ -16,138 +27,125 @@ define([
             var populationIn = 0;
             var populationOut = 0;
 
-            // patch squares on map
-            // e.g. patch(mapIn, 100, 0, 0, 4, 4);
-            var patch = function (out, n, x, y, w, h) {
+            var random = Math.random;
 
-                // boundary check
-                w = x + w > size ? size - x : w;
-                h = y + h > size ? size - y : h;
+            var spinkle = function (mean, deviation, angle, population, out) {
 
-                // tweak population
-                for (var j = 0; j < h; j++) {
-                    for (var i = 0; i < w; i++) {
-                        var offset = size * y + x + w * j + i;
-                        if (out) {
-                            populationOut += n - mapOut[offset];
-                        } else {
-                            populationIn += n - mapIn[offset];
-                        }
-                    }
-                }
-
-                // row
-                var row = [];
-                for (var i = 0; i < w; i++)
-                    row.push(n);
-                // set rows
-                for (var i = 0; i < h; i++) {
-                    var offset = size * (y + i) + x; 
-                    if (out)
-                        mapOut.set(row, offset);
-                    else
-                        mapIn.set(row, offset);
-                }
-            };
-
-            // normal distribution
-            var normalverteilung = function (times) {
-                times = times || 20;
-                var r = 0;
-                for (var i = 0; i < times ; i++) {
-                    r += Math.random();
+                var cos = Math.cos;
+                var sin = Math.sin;
+                var factor = 0.10;
+                var vector = {
+                    x: normal(0, deviation.a) * factor,
+                    y: normal(0, deviation.b) * factor
                 };
-                return r / times;
-            };
 
-            var scale = function (r) {
-                return Math.floor(r * size);
-            }
+                var rotate = function (vector, angle) {
+                    return {
+                        x: vector.x * cos(angle) - vector.y * sin(angle),
+                        y: vector.x * sin(angle) + vector.y * cos(angle)
+                    };
+                };
 
-            var core = function () {
-                var coreX = scale(normalverteilung(2));
-                var coreY = scale(normalverteilung(2));
+                var transist = function (vector, offset) {
+                    return {
+                        x: vector.x + offset.x,
+                        y: vector.y + offset.y
+                    };
+                };
 
-                console.log(coreX, coreY);
-            };
 
-            var randomPatch = function (out, x, y) {
+                var floor = function (vector) {
+                    return {
+                        x: Math.floor(vector.x),
+                        y: Math.floor(vector.y)
+                    };
+                };
 
-                var r = Math.random();
+                var scale = function (vector, factor) {
+                    return {
+                        x: vector.x * factor,
+                        y: vector.y * factor
+                    };
+                };
+            
+                var coordinate = floor(scale(transist(rotate(vector, angle), mean), size));
+                // punch on map
 
-                if (r < 0.04) {
-                    // type 3, population 800, 4%
-                    var population = 800;
-                    var factor = 0.2;
-                } else if (r > 0.2) {
-                    // type 1, population 50, 80%
-                    var population = 50;
-                    var factor = 0.8;
+                if (
+                    coordinate.x < 0 || 
+                    coordinate.x >= size || 
+                    coordinate.y < 0 ||
+                    coordinate.y >= size
+                ) return;
+
+                var offset = coordinate.y * size + coordinate.x;
+                if (out) {
+                    populationOut += population;
+                    mapOut[offset] += population;
                 } else {
-                    // type 2, population 200, 16%
-                    var population = 200;
-                    var factor = 0.4;
+                    populationIn += population;
+                    mapIn[offset] += population;
+                }
+            };
+
+            var core = function (times, out) {
+                
+                times = times || 1000;
+
+                // location, 0.2 ~ 0.8
+                var center = { 
+                    x: random() * 0.7 + 0.15,
+                    y: random() * 0.7 + 0.15
+                };
+
+                // 2 dimension, b = 0.2a ~ 1.8a
+                var a = random() + 0.2;
+                var deviation = {
+                    a: a,
+                    b: a * (random() * 1.6 + 0.2)
+                };
+
+                // rotation angle, 0 ~ π
+                var angle = Math.PI * random();
+                for (var i = 0; i < times; i++) {
+                    spinkle(center, deviation, angle, 200, out);
                 }
 
-                var x = x || Math.floor(Math.random() * size);
-                var y = y || Math.floor(Math.random() * size);
-                var w = Math.floor(Math.random() * size * factor);
-                var h = Math.floor(Math.random() * w * 2);
-                
-                if (out)
-                    mapOut = patch(mapOut, -population, x, y, w, h);
-                else
-                    mapIn = patch(mapIn, population, x, y, w, h);
+            };
+
+
+            for (var i = 0; i < 15; i++) {
+                core(250, true);
             }
 
-            // // random stage
-            // // seed until pOut > pIn
-            // // then make up the difference with pIn hotpoint 
-            // var round = 30;
+            for (var i = 0; i < 10; i++) {
+                core(250, false);
+            }
 
-            // // in
-            // for (var i = 0; i < round; i++) {
-            //     randomPatch(false);
-            // }
+            while (populationIn != populationOut) {
+                
+                var center = { 
+                    x: random() * 0.5 + 0.25,
+                    y: random() * 0.5 + 0.25
+                };
 
-            // // out
-            // while (populationOut < populationIn) {
-            //     randomPatch(true);
-            // }
+                // 2 dimension, b = 0.2a ~ 1.8a
+                var a = random() * 2 + 1;
+                var deviation = {
+                    a: a,
+                    b: a * (random() * 1 + 0.5)
+                };
+                var angle = Math.PI * random();
 
-            // // in
-            // while (true) {
-            //     var x = Math.floor(Math.random() * size);
-            //     var y = Math.floor(Math.random() * size);
-            //     var difference = populationOut - populationIn;
-            //     if (difference == 0)
-            //         break;
-            //     else if (difference < 1000) {
-            //         mapIn.set([difference], y * size + x);
-            //         populationIn += difference;
-            //     } else {
-            //         mapIn.set([difference], y * size + x);
-            //         populationIn += 1000;
-            //     }
-            // }
+                spinkle(center, deviation, angle, 200, false);
+            }
 
-            // patch(true, 100, 1, 1, 2, 2);
-            // patch(true, 100, 2, 2, 2, 2);
-            // patch(true, 200, 3, 3, 3, 3);
-
-
-
-            // console.log('population in', populationIn);
-            // console.log('population out', populationOut);
-            // console.log(mapIn);
-            // console.log(mapOut);
-
-            core();
-
+            console.log('in', populationIn)
+            console.log('out', populationOut)
             this.set('population', populationIn);
             this.set('mapIn', mapIn);
             this.set('mapOut', mapOut);
-
+            this.trigger('generated');
         }
     });
 });
