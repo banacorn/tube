@@ -3,15 +3,44 @@
 @import 'arrow'
 @import 'color'
 
-@import 'structure'
+@font-face
+    font-family: 'Tauri'
+    font-style: normal
+    font-weight: 400
+    src: local('Tauri Regular'), local('Tauri-Regular'), url('/fonts/Tauri.woff') format('woff')
+
 
 @font-face
-  font-family: 'Tauri'
-  font-style: normal
-  font-weight: 400
-  src: local('Tauri Regular'), local('Tauri-Regular'), url('/fonts/Tauri.woff') format('woff')
+    font-family: 'Crete Round'
+    font-style: normal
+    font-weight: 400
+    src: local('Crete Round'), local('CreteRound-Regular'), url('/fonts/CreteRound.woff') format('woff')
 
-$color = $pomegranate
+
+$turquoise = #1abc9c
+$greensea = #16a085
+$emerland = #2ecc71
+$nephritis = #27ae60
+$peterriver = #3498db
+$belizehole = #2980b9
+$amethyst = #9b59b6
+$wisteria = #8e44ad
+$wetasphalt = #34495e
+$midnightblue = #2c3e50
+$sunflower = #f1c40f
+$orange = #f39c12
+$carrot = #e67e22
+$pumpkin = #d35400
+$alizarin = #e74c3c
+$pomegranate = #c0392b
+$clouds = #ecf0f1
+$silver = #bdc3c7
+$concrete = #95a5a6
+$asbestos = #7f8c8d
+$basalt = #38383a
+
+$blau = $wetasphalt
+$gold = darken($sunflower, 10%)
 
 global-reset()
 html5-reset()
@@ -30,38 +59,137 @@ html
 body
     height: 100%
     font-family: 'Tauri'
-    text-transform: uppercase
+    // text-transform: uppercase
     height: 100%
-    background: $clouds
-    color: $concrete
+    background: $blau
+    color: white
 
-    text-shadow 2px 2px 1px white !important
 a
     text-decoration: none
     color: inherit
 
-
-nav
-    list-style: none
-
 input
-    border: none
     background: inherit
-    font-family: 'Tauri'
-  &:focus
-    outline: none
-    outline-color: transparent
+    border: none
+    color: $clouds
+    font-size: 150%
 
 button
-    font-family: 'Tauri'
-
-    border: none
-    color: $concrete
     background: inherit
-    font-size: inherit
-    padding: 10px
-    margin-right: 10px
-    text-transform: uppercase
+    border: none
+    color: inherit
+    border-radius: 4px
+    font-size: 120%
+    padding: 5px 15px
+    margin: 5px
     cursor: pointer
-    &:hover
-      color: $color
+
+label
+    font-size: 150%
+    padding-right: 20px
+
+
+//
+//  Stuctural
+//
+
+$headerHeight = 100px
+
+
+
+h1
+    height: $headerHeight
+    line-height: $headerHeight
+    color: white
+    text-align: center
+    font-size: 300%
+    font-family: 'Crete Round'
+
+h2
+    color: $white
+    font-size: 200%
+
+section header
+
+    margin-bottom: 20px
+    overflow: hidden
+
+    h2
+        float: left
+
+    .header-group
+        float: right
+    a
+        float: right
+        padding-left: 40px
+        line-height: 200%
+        font-size: 120%
+
+//
+//  Sections
+//
+
+
+#header
+    height: $headerHeight
+    background: $basalt
+
+
+section
+    padding: 40px 0
+
+section > div
+    width: 1000px
+    margin: 0 auto
+
+
+#section-simulation
+
+    // border-top: $blau 10px dashed
+    height: 200px
+    background: $gold
+
+    // border: 10px darken($belizehole, 20%) dashed
+    // border-bottom: 10px darken($belizehole, 20%) dashed
+
+
+#section-about
+
+    height: 200px
+    background: $blau
+
+
+//
+//  Create
+//
+
+#section-create
+
+    background: $blau
+    overflow: hidden
+
+    canvas
+        border: 10px solid $basalt
+        background: $clouds
+
+
+    #create-map
+    #create-form
+        float: left    
+
+    button
+        background: lighten($blau, 20%)
+        color: $clouds
+
+        &:hover
+            background: lighten($blau, 30%)
+            color: white
+
+
+    #button-layer
+        width: 140px
+
+    form
+        padding-left: 40px
+        > div
+            padding: 10px 0

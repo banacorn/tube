@@ -1,28 +1,33 @@
 @import 'font-awesome.css';
-#nav{height:100px;padding:0 100px;background:rgba(236,240,241,0.5);color:#95a5a6;overflow:hidden}
-#main{background:#ecf0f1;padding:0 100px}
-#nav > header,#nav > li{float:left;height:100px;margin-right:40px;line-height:100px;font-size:100%;text-align:center;cursor:pointer;}
-#nav > header:hover,#nav > li:hover{background:#ecf0f1;color:#c0392b}
-#nav > header{font-size:200%}
-.city{float:left;width:300px;height:200px;margin:20px 20px 20px 0;padding:20px;background:#d1dadd;color:#95a5a6;}
-.city:hover{background:#c0392b;color:#fff}
-#create-map{float:left;width:500px;}
-#create-map canvas{background:#fff;margin-bottom:10px}
-#create-form{float:left;padding-left:40px;font-size:150%;}
-#create-form form > div{height:60px;line-height:60px}
-#create-form input{margin-left:20px;font-size:inherit;text-transform:uppercase;color:#c0392b}
-#button-group{top:540px;position:absolute}
 @font-face{font-family:'Tauri';font-style:normal;font-weight:400;src:local('Tauri Regular'),local('Tauri-Regular'),url("/fonts/Tauri.woff") format('woff')}
+@font-face{font-family:'Crete Round';font-style:normal;font-weight:400;src:local('Crete Round'),local('CreteRound-Regular'),url("/fonts/CreteRound.woff") format('woff')}
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-family:inherit;font-size:100%;vertical-align:baseline}
 body{line-height:1;color:#000;background:#fff}
 ol,ul{list-style:none}
 table{border-collapse:separate;border-spacing:0;vertical-align:middle}
 caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
 a img{border:none}
-html,body{height:100%;font-family:'Tauri';text-transform:uppercase;height:100%;background:#ecf0f1;color:#95a5a6;text-shadow:2px 2px 1px #fff !important}
+html,body{height:100%;font-family:'Tauri';height:100%;background:#34495e;color:#fff}
 a{text-decoration:none;color:inherit}
-nav{list-style:none}
-input{border:none;background:inherit;font-family:'Tauri'}
-&:focus{outline:none;outline-color:transparent}
-button{font-family:'Tauri';border:none;color:#95a5a6;background:inherit;font-size:inherit;padding:10px;margin-right:10px;text-transform:uppercase;cursor:pointer;}
-button:hover{color:#c0392b}
+input{background:inherit;border:none;color:#ecf0f1;font-size:150%}
+button{background:inherit;border:none;color:inherit;border-radius:4px;font-size:120%;padding:5px 15px;margin:5px;cursor:pointer}
+label{font-size:150%;padding-right:20px}
+h1{height:100px;line-height:100px;color:#fff;text-align:center;font-size:300%;font-family:'Crete Round'}
+h2{color:$white;font-size:200%}
+section header{margin-bottom:20px;overflow:hidden;}
+section header h2{float:left}
+section header .header-group{float:right}
+section header a{float:right;padding-left:40px;line-height:200%;font-size:120%}
+#header{height:100px;background:#38383a}
+section{padding:40px 0}
+section > div{width:1000px;margin:0 auto}
+#section-simulation{height:200px;background:#dab10d}
+#section-about{height:200px;background:#34495e}
+#section-create{background:#34495e;overflow:hidden;}
+#section-create canvas{border:10px solid #38383a;background:#ecf0f1}
+#section-create #create-map,#section-create #create-form{float:left}
+#section-create button{background:#4e6d8d;color:#ecf0f1;}
+#section-create button:hover{background:#5b80a4;color:#fff}
+#section-create #button-layer{width:140px}
+#section-create form{padding-left:40px;}
+#section-create form > div{padding:10px 0}

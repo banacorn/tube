@@ -94,8 +94,8 @@ define([
 
                 // location, 0.2 ~ 0.8
                 var center = { 
-                    x: random() * 0.7 + 0.15,
-                    y: random() * 0.7 + 0.15
+                    x: random() * 0.6 + 0.2,
+                    y: random() * 0.6 + 0.2
                 };
 
                 // 2 dimension, b = 0.2a ~ 1.8a
@@ -114,14 +114,19 @@ define([
             };
 
 
-            for (var i = 0; i < 15; i++) {
+            var sprinkleTimes = Math.random() * 20;
+
+            // spinkle pop out
+            for (var i = 0; i < sprinkleTimes + 5; i++) {
                 core(250, true);
             }
 
-            for (var i = 0; i < 10; i++) {
+            // spinkle pop in
+            for (var i = 0; i < sprinkleTimes; i++) {
                 core(250, false);
             }
 
+            // make up pop in
             while (populationIn != populationOut) {
                 
                 var center = { 

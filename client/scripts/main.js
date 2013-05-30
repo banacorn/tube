@@ -18,7 +18,8 @@ require([
     'map',
     'text!../templates/cityitem.html',
     'text!../templates/create.html',
-], function ($, Backbone, Storage, Hogan, Raphael, Model, Map, $$cityItem, $$create) {
+    'text!../templates/home.html',
+], function ($, Backbone, Storage, Hogan, Raphael, Model, Map, $$cityItem, $$create, $$home) {
 
     // helper shits
     var socket = io.connect();
@@ -45,8 +46,11 @@ require([
 
         home: function () {
 
-            var cityListView = new CityListView
-            $('#main').html(cityListView.el);
+            log('fuck')
+            var homeView = new HomeView
+            $('#main').html(homeView.el);
+
+            // var cityListView = new CityListView
 
         },
 
@@ -63,7 +67,7 @@ require([
     var ROUTER = new Router;
 
     var CreateView = Backbone.View.extend({
-        canvasSize: 500,
+        canvasSize: 400,
         template: Hogan.compile($$create),
 
         events: {
@@ -193,6 +197,20 @@ require([
                 $('#input-name', this.$el).select();
             }, 0);
         }
+    });
+
+    var HomeView = Backbone.View.extend({
+        template: Hogan.compile($$home),
+        tagName: 'div',
+        initialize: function () {
+            this.render();
+        },
+
+        render: function () {
+            this.$el.html(this.template.render());
+            return this;
+        }
+
     });
 
     var CityItemView = Backbone.View.extend({

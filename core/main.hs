@@ -29,6 +29,11 @@ ack :: Redis ()
 ack = pubSub (subscribe ["tubes"]) $ \msg -> do
       putStrLn $ "Message from " ++ show (msgMessage msg)
       return mempty
+--
+--
+--
+
+
 
 --
 --  
