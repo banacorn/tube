@@ -1,7 +1,12 @@
 require.config({
+    shim: {
+        io: []
+    },
+
     paths: {
         jquery      : 'jam/jquery/dist/jquery',
-        // underscore  : 'jam/underscore/underscore',
+        io          : '/socket.io/socket.io',
+        underscore  : 'jam/underscore/underscore',
         backbone    : 'jam/backbone/backbone',
         hogan       : 'jam/hogan/hogan',
         raphael     : 'jam/raphael'
@@ -11,18 +16,21 @@ require.config({
 require([
     'jquery',
     'backbone',
+    'io',
     'storage',
     'hogan',
     'raphael/raphael.amd',
     'model',
     'map',
+    'view/simulation',
     'text!../templates/cityitem.html',
     'text!../templates/create.html',
     'text!../templates/home.html',
-], function ($, Backbone, Storage, Hogan, Raphael, Model, Map, $$cityItem, $$create, $$home) {
+], function ($, Backbone, io, Storage, Hogan, Raphael, Model, Map, SimulationView, $$cityItem, $$create, $$home) {
 
     // helper shits
-    var socket = io.connect();
+
+    // var socket = io.connect();
     var log = function (a) { console.log(a); };
 
     // alias
@@ -38,7 +46,7 @@ require([
         routes: {
             '': 'home',
             'create': 'create',
-            'about': 'about'
+            'simulation': 'simulation'
         },
 
         initialize: function () {
@@ -46,7 +54,6 @@ require([
 
         home: function () {
 
-            log('fuck')
             var homeView = new HomeView
             $('#main').html(homeView.el);
 
@@ -60,7 +67,9 @@ require([
             $('#main').html(createView.el);
         },
 
-        about: function () {
+        simulation: function () {
+            var simulationView = new SimulationView
+            $('#main').html(simulationView.el);
         }
     });
 

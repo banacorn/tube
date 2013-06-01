@@ -39,8 +39,11 @@ $concrete = #95a5a6
 $asbestos = #7f8c8d
 $basalt = #38383a
 
-$blau = $wetasphalt
+// $gruen = darken($nephritis, 40%)
+// $blau = $gold
+// $blau = darken($belizehole, 40%)
 $gold = darken($sunflower, 10%)
+$color = $gold
 
 global-reset()
 html5-reset()
@@ -61,8 +64,8 @@ body
     font-family: 'Tauri'
     // text-transform: uppercase
     height: 100%
-    background: $blau
-    color: white
+    background: $clouds
+    color: $basalt
 
 a
     text-decoration: none
@@ -71,7 +74,7 @@ a
 input
     background: inherit
     border: none
-    color: $clouds
+    color: inherit
     font-size: 150%
 
 button
@@ -100,14 +103,15 @@ $headerHeight = 100px
 h1
     height: $headerHeight
     line-height: $headerHeight
-    color: white
+    color: $clouds
     text-align: center
     font-size: 300%
     font-family: 'Crete Round'
 
 h2
-    color: $white
+    color: $basalt
     font-size: 200%
+    font-family: 'Crete Round'
 
 section header
 
@@ -147,7 +151,7 @@ section > div
 
     // border-top: $blau 10px dashed
     height: 200px
-    background: $gold
+    // background: white
 
     // border: 10px darken($belizehole, 20%) dashed
     // border-bottom: 10px darken($belizehole, 20%) dashed
@@ -156,7 +160,6 @@ section > div
 #section-about
 
     height: 200px
-    background: $blau
 
 
 //
@@ -165,12 +168,10 @@ section > div
 
 #section-create
 
-    background: $blau
     overflow: hidden
 
     canvas
-        border: 10px solid $basalt
-        background: $clouds
+        border: 10px solid $clouds
 
 
     #create-map
@@ -178,11 +179,11 @@ section > div
         float: left    
 
     button
-        background: lighten($blau, 20%)
-        color: $clouds
+        background: $basalt
+        color: white
 
         &:hover
-            background: lighten($blau, 30%)
+            background: $color
             color: white
 
 

@@ -10,7 +10,7 @@ define([
     };
 
     return Backbone.Model.extend({
-        urlRoot: '/api/city',
+        urlRoot: '/api/simulation',
         defaults: {
             name: 'untitled',
             size: 40,
@@ -19,6 +19,11 @@ define([
             mapOut: [],
             layer: 'both'
         },
+
+        validate: function (attributes) {
+
+        },
+
         generate: function (core) {
 
             var size = this.get('size');
@@ -145,11 +150,9 @@ define([
                 spinkle(center, deviation, angle, 200, false);
             }
 
-            console.log('in', populationIn)
-            console.log('out', populationOut)
             this.set('population', populationIn);
-            this.set('mapIn', mapIn);
-            this.set('mapOut', mapOut);
+            this.set('mapIn', Array.apply([], mapIn));
+            this.set('mapOut', Array.apply([], mapOut));
             this.trigger('generated');
         }
     });
