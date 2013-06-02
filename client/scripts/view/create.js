@@ -2,7 +2,7 @@ define([
     'jquery',
     'backbone',
     'hogan',
-    'map',
+    '../model/map',
     '../view/map',
     'text!../../templates/create.html',
 ], function ($, Backbone, Hogan, Map, 

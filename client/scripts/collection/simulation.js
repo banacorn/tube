@@ -1,7 +1,7 @@
 define([
     'jquery',
     'backbone',
-    'map',
+    '../model/map',
     'storage'
 ], function ($, Backbone, Simulation, Storage) {
 
