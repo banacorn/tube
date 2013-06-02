@@ -1,6 +1,12 @@
 require.config({
     shim: {
-        io: []
+        io: [],
+        main: {
+            deps: ['storage'],
+            init: function (Storage) {
+                console.log('Storage initialized');
+            }
+        }
         // store: {
         //     deps: ['backbone', 'io'],
         //     init: function (Store) {
@@ -18,7 +24,6 @@ require.config({
         hogan       : 'jam/hogan/hogan',
         raphael     : 'jam/raphael',
 
-        store       : 'store',
         map         : 'map'
     }
 }); 
@@ -81,6 +86,7 @@ require([
             this.render();
             var simulationCollection = new SimulationCollection;
             simulationCollection.fetch();
+            console.log('SimulationCollection fetched', simulationCollection.length)
 
 
 

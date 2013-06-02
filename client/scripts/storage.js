@@ -59,7 +59,7 @@ require([
                 case 'read':
 
                     collection.once('sync', function () {
-                        console.log('synced')
+                        console.log('synced');
                         var oldModelIDs     = Storage.get(url) || [];
                         var newModelIDs     = collection.pluck('id');
                         Storage.set(url, newModelIDs);

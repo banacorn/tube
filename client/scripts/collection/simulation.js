@@ -2,7 +2,8 @@ define([
     'jquery',
     'backbone',
     'map',
-], function ($, Backbone, Simulation) {
+    'storage'
+], function ($, Backbone, Simulation, Storage) {
 
     var SimulationCollection = Backbone.Collection.extend({
         model: Simulation,
