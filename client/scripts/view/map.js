@@ -10,6 +10,7 @@ define([
         tagName: 'canvas',
         className: 'simulation-map',
         initialize: function () {
+            var self = this;
             if (this.model) {
                 this.listenTo(this.model, 'generated', this.render);
             } else {
@@ -18,11 +19,16 @@ define([
                 this.model.generate(1);
             }
 
+
             if (this.attributes)
                 this.canvasSize = this.attributes.width;
             else
                 this.canvasSize = 400
             this.render();
+
+            this.model.on('change', function () {
+                self.render();
+            })
         },
 
         render: function () {

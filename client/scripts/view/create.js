@@ -25,8 +25,6 @@ define([
         initialize: function () {
             
             this.map = new Map;
-            this.listenTo(this.map, 'generated', this.renderMap);
-            this.listenTo(this.map, 'change:layer', this.renderMap);
             this.listenTo(this.map, 'change:layer', this.renderLayerButton);
             this.listenTo(this.map, 'change:population', this.showPopulation);
             this.render();
@@ -44,8 +42,11 @@ define([
             });
             $('#create-map', this.$el).html(this.mapView.el);
 
-            this.map.generate(1);
+            this.generateMap();
+        },
 
+        generateMap: function () {
+            this.map.generate(1);
         },
 
         showPopulation: function () {
