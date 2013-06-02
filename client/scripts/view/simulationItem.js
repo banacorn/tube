@@ -34,7 +34,7 @@ define([
                     height: viewSize - viewMargin * 2
                 }
             });
-            $(this.$el).append(this.mapView.el);
+            $('figcaption', this.$el).after(this.mapView.el);
         }
 
     });

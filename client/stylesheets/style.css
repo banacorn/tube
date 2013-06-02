@@ -17,8 +17,8 @@ label{font-size:150%;padding-right:20px}
 #header .link{color:#ecf0f1;font-size:120%;display:block;float:right;line-height:60px}
 #header > div{width:1000px;margin:0 auto}
 h1{height:60px;line-height:60px;color:#fff;float:left;font-size:250%;font-family:'Crete Round'}
-h2{color:#38383a;font-size:200%;font-family:'Crete Round'}
-section header{margin-bottom:20px;overflow:hidden;}
+h2{color:#38383a;font-size:200%}
+section header{height:60px;line-height:60px;margin-bottom:20px;overflow:hidden;}
 section header h2{float:left}
 section header .header-group{float:right}
 section header a{padding-left:40px;line-height:100%}

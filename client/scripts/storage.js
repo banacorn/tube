@@ -3,8 +3,6 @@ require([
     'underscore'
 ], function (Backbone, _) {
 
-    console.log('Storage initialized');
-
     // a thin layer of abstraction on top of localStorage
 
     var Storage = {
@@ -51,12 +49,12 @@ require([
         var findModel = function (id) { return Storage.get(url + '/' + id); };
 
         if (type === 'collection') {
-
             var collection = model;
             var IDs = Storage.get(url) || [];
 
             switch (method) {
                 case 'read':
+                    // console.log('COLLECTION READ')
 
                     collection.once('sync', function () {
                         console.log('[Storage] remote sync');
@@ -86,7 +84,8 @@ require([
 
                     // fetch localStorage and 'update'
                     if (IDs.length !== 0) {
-                        var models = IDs.map(findModel);
+
+                        var models = _(IDs).map(findModel);
                         collection.set(models);
                         console.log('[Storage] local sync')
                     }
@@ -103,16 +102,19 @@ require([
 
 
             switch (method) {
-                case 'read':
+                case 'read':    
+
                     model.once('sync', function () {
                         if (! _.isEqual(model.toJSON(), Storage.get(url))) {
                             Storage.set(url, model);
                         }
+                        console.log('[Storage] remote sync');
                     });
 
                     // fetch localStorage and 'update'
                     if (Storage.get(url)) {
                         model.set(Storage.get(url));
+                        console.log('[Storage] local sync');
                     }
 
                     break;

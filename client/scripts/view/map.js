@@ -2,8 +2,9 @@ define([
     'jquery',
     'backbone',
     'hogan',
+    '../model/map'
 ], function ($, Backbone, Hogan,
-    SimulationCollection
+    Map
 ) {
     var MapView = Backbone.View.extend({
         tagName: 'canvas',
@@ -17,7 +18,10 @@ define([
                 this.model.generate(1);
             }
 
-            this.canvasSize = this.attributes.width;
+            if (this.attributes)
+                this.canvasSize = this.attributes.width;
+            else
+                this.canvasSize = 400
             this.render();
         },
 

@@ -4,7 +4,6 @@ require.config({
         main: {
             deps: ['storage'],
             init: function (Storage) {
-                console.log('Storage initialized');
             }
         }
         // store: {
@@ -23,8 +22,6 @@ require.config({
         backbone    : 'jam/backbone/backbone',
         hogan       : 'jam/hogan/hogan',
         raphael     : 'jam/raphael',
-
-        map         : 'map'
     }
 }); 
 
@@ -33,15 +30,15 @@ require([
     'backbone',
     'io',
     'hogan',
-    'map',
     'storage',
     'view/create',
     'view/home',
+    'view/simulation',
     'collection/simulation',
 ], function (
     $, Backbone, io, Hogan,
-    Map, Storage,
-    CreateView, HomeView,
+    Storage,
+    CreateView, HomeView, SimulationView,
     SimulationCollection
 ) {
 
@@ -53,7 +50,8 @@ require([
         
         routes: {
             '': 'home',
-            'create': 'create'
+            'create': 'create',
+            'simulation/:id': 'simulation',
         },
 
         initialize: function () {
@@ -70,6 +68,13 @@ require([
 
             var createView = new CreateView
             $('#main').html(createView.el);
+        },
+
+        simulation: function (id) {
+            var simulationView = new SimulationView({
+                id: id
+            });
+            $('#main').html(simulationView.el);
         }
 
     });
