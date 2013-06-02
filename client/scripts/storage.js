@@ -59,7 +59,7 @@ require([
                 case 'read':
 
                     collection.once('sync', function () {
-                        console.log('synced');
+                        console.log('[Storage] remote sync');
                         var oldModelIDs     = Storage.get(url) || [];
                         var newModelIDs     = collection.pluck('id');
                         Storage.set(url, newModelIDs);
@@ -87,7 +87,8 @@ require([
                     // fetch localStorage and 'update'
                     if (IDs.length !== 0) {
                         var models = IDs.map(findModel);
-                        collection.set(models)
+                        console.log('[Storage] local sync')
+                        collection.set(models);
                     }
 
                     break;

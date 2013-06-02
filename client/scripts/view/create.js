@@ -3,10 +3,8 @@ define([
     'backbone',
     'hogan',
     'map',
-    'collection/simulation',
     'text!../../templates/create.html',
 ], function ($, Backbone, Hogan, Map, 
-    SimulationCollection,
     $$create
 ) {
 
@@ -128,11 +126,9 @@ define([
             $('#button-layer', this.$el).html(content)
         },
 
-        submit: function () {
-            console.log('submit')
-        },
-
         saveMap: function () {
+            var name = $('#input-name', this.el$).val();
+            this.map.set('name', name);
             this.map.save();
         },
 

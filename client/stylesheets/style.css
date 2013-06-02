@@ -33,3 +33,10 @@ section > div{width:1000px;margin:0 auto}
 #section-create #button-layer{width:140px}
 #section-create form{padding-left:40px;}
 #section-create form > div{padding:10px 0}
+.simulation-item{float:left;width:300px;height:300px;margin-bottom:50px;margin-right:50px;}
+.simulation-item figcaption{margin:0;margin-top:240px;width:260px;padding:10px;height:20px;line-height:20px;background:rgba(236,240,241,0.7);position:absolute}
+.simulation-item .simulation-item-name{padding:0 5px;font-size:120%}
+.simulation-item .simulation-item-name:first-letter{text-transform:uppercase}
+.simulation-item .simulation-item-population{color:#dab10d;font-size:75%}
+.simulation-item canvas{margin:0}
+.simulation-item:nth-of-type(3n){margin-right:0}

@@ -36,15 +36,13 @@ require([
     'map',
     'storage',
     'view/create',
+    'view/home',
     'collection/simulation',
-    'text!../templates/create.html',
-    'text!../templates/home.html',
 ], function (
     $, Backbone, io, Hogan,
     Map, Storage,
-    CreateView, 
-    SimulationCollection,
-    $$create, $$home
+    CreateView, HomeView,
+    SimulationCollection
 ) {
 
     //
@@ -78,26 +76,6 @@ require([
 
     var ROUTER = new Router;
 
-
-    var HomeView = Backbone.View.extend({
-        template: Hogan.compile($$home),
-        tagName: 'div',
-        initialize: function () {
-            this.render();
-            var simulationCollection = new SimulationCollection;
-            simulationCollection.fetch();
-            console.log('SimulationCollection fetched', simulationCollection.length)
-
-
-
-        },
-
-        render: function () {
-            this.$el.html(this.template.render());
-            return this;
-        }
-
-    });
 
     // var CityItemView = Backbone.View.extend({
     //     template: Hogan.compile($$cityItem),
