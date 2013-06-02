@@ -6,18 +6,13 @@ require.config({
             init: function (Storage) {
             }
         }
-        // store: {
-        //     deps: ['backbone', 'io'],
-        //     init: function (Store) {
-        //         console.log('Store initialized');
-        //     }  
-        // } 
     },
 
     paths: {
         jquery      : 'jam/jquery/dist/jquery',
         io          : '/socket.io/socket.io',
         storage     : 'storage',
+        router      : 'router',
         underscore  : 'jam/underscore/underscore',
         backbone    : 'jam/backbone/backbone',
         hogan       : 'jam/hogan/hogan',
@@ -31,56 +26,11 @@ require([
     'io',
     'hogan',
     'storage',
-    'view/create',
-    'view/home',
-    'view/simulation',
-    'collection/simulation',
+    'router'
 ], function (
     $, Backbone, io, Hogan,
-    Storage,
-    CreateView, HomeView, SimulationView,
-    SimulationCollection
+    Storage, ROUTER
 ) {
-
-    //
-    //  Router & Breadcrumb
-    //
-
-    var Router = Backbone.Router.extend({
-        
-        routes: {
-            '': 'home',
-            'create': 'create',
-            'simulation/:id': 'simulation',
-        },
-
-        initialize: function () {
-        },
-
-        home: function () {
-
-            var homeView = new HomeView
-            $('#main').html(homeView.el);
-
-        },
-
-        create: function () {
-
-            var createView = new CreateView
-            $('#main').html(createView.el);
-        },
-
-        simulation: function (id) {
-            var simulationView = new SimulationView({
-                id: id
-            });
-            $('#main').html(simulationView.el);
-        }
-
-    });
-
-    var ROUTER = new Router;
-
 
     // var CityItemView = Backbone.View.extend({
     //     template: Hogan.compile($$cityItem),
