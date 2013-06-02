@@ -2,8 +2,9 @@ require.config({
     shim: {
         io: [],
         main: {
-            deps: ['storage'],
-            init: function (Storage) {
+            deps: ['storage', 'router'],
+            init: function () {
+                console.log('fuck')
             }
         }
     },
@@ -31,7 +32,6 @@ require([
     $, Backbone, io, Hogan,
     Storage, ROUTER
 ) {
-
     // var CityItemView = Backbone.View.extend({
     //     template: Hogan.compile($$cityItem),
     //     tagName: 'li',

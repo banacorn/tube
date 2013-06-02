@@ -6,7 +6,6 @@ define([
 ], function (Backbone,
     CreateView, HomeView, SimulationView
 ) {
-    console.log('Router initialized');
     var Router = Backbone.Router.extend({
         
         routes: {
@@ -16,6 +15,7 @@ define([
         },
 
         initialize: function () {
+            this.listenTo(Backbone, 'navigate', this.navigate);
         },
 
         home: function () {
@@ -39,6 +39,7 @@ define([
         }
 
     });
+    console.log('Router initialized');
 
     return new Router;
 });

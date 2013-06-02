@@ -203,6 +203,7 @@ require([
         //     model.trigger('remote-sync', model, resp, options);
         // };
 
+        console.log('Storage initialized');
 
 
         Backbone.remoteSync.apply(this, arguments);

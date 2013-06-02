@@ -6,7 +6,6 @@ define([
     '../view/map',
     'text!../../templates/simulation.html',
 ], function ($, Backbone, Hogan, Map, MapView ,$$simulation) {
-
    
     var SimulationView = Backbone.View.extend({
         mapSize: 600,
@@ -85,8 +84,8 @@ define([
         },
 
         destroy: function () {
-            console.log('destroy');
             this.model.destroy();
+            Backbone.trigger('navigate', '', {trigger: true});
         }
 
 
