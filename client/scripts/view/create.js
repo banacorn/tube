@@ -28,6 +28,7 @@ define([
             this.listenTo(this.map, 'change:layer', this.renderLayerButton);
             this.listenTo(this.map, 'change:population', this.showPopulation);
             this.render();
+            this.focusNameInput();
         },
 
         render: function () {
@@ -92,7 +93,6 @@ define([
 
         focusNameInput: function () {
             setTimeout(function () {
-
                 $('#input-name', this.$el).select();
             }, 0);
         }
