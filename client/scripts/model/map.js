@@ -21,7 +21,8 @@ define([
             population: 0,
             mapIn: [],
             mapOut: [],
-            layer: 'both'
+            layer: 'both',
+            initialized: false
         },
 
         generate: function (core) {
