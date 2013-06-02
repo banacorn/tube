@@ -18,18 +18,24 @@ define([
             var self = this;
             this.render();
             this.simulationCollection = new SimulationCollection;
-            this.simulationCollection.on('sync', function (collection) {
-                collection.forEach(function (model) {
-                    var simulationItemView = new SimulationItemView({
-                        model: model,
-                        id: model.id
-                    });
-                    $('ul.simulation-list', self.el$).append(simulationItemView.el);
-                })
-                // console.log('got data!!', arguments);
+            this.simulationCollection.on('add', function (model) {
+                var simulationItemView = new SimulationItemView({
+                    model: model,
+                    id: model.id
+                });
+                $('ul.simulation-list', self.$el).append(simulationItemView.el);
             });
+            // this.simulationCollection.on('sync', function (collection) {
+            //     collection.forEach(function (model) {
+            //         console.log('remote add')
+            //         var simulationItemView = new SimulationItemView({
+            //             model: model,
+            //             id: model.id
+            //         });
+            //         $('ul.simulation-list', self.el$).append(simulationItemView.el);
+            //     })
+            // });
             this.simulationCollection.fetch();
-            // console.log('SimulationCollection fetched', this.simulationCollection.length)
 
 
 

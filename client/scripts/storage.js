@@ -87,8 +87,8 @@ require([
                     // fetch localStorage and 'update'
                     if (IDs.length !== 0) {
                         var models = IDs.map(findModel);
-                        console.log('[Storage] local sync')
                         collection.set(models);
+                        console.log('[Storage] local sync')
                     }
 
                     break;
