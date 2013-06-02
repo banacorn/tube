@@ -23,6 +23,8 @@ section header{height:60px;line-height:60px;margin-bottom:20px;overflow:hidden;}
 section header h2{float:left}
 section header .header-group{float:right}
 section header a{padding-left:40px;line-height:100%}
+.small{font-size:60%}
+.colored{color:#dab10d}
 #main{overflow:hidden;min-height:400px;background:#ecf0f1}
 section{padding:40px 0}
 section > div{width:1000px;margin:0 auto}
