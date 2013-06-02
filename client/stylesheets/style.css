@@ -41,3 +41,4 @@ section > div{width:1000px;margin:0 auto}
 .simulation-item .simulation-item-population{color:#dab10d;font-size:75%}
 .simulation-item canvas{margin:0}
 .simulation-item:nth-of-type(3n){margin-right:0}
+.initialize-mask{position:absolute;top:60px;left:0;width:100%;height:100%;background:rgba(255,255,255,0.7);text-align:center;line-height:600px;font-size:500%}

@@ -5,7 +5,7 @@ define([
     '../model/map',
     '../view/map',
     'text!../../templates/simulation.html',
-], function ($, Backbone, Hogan, Map, MapView ,$$simulation) {
+], function ($, Backbone, Hogan, Map, MapView, $$simulation) {
    
     var SimulationView = Backbone.View.extend({
         mapSize: 600,
@@ -34,9 +34,8 @@ define([
             this.model.on('change', function (model) {
                 self.render();
                 self.renderMap();
-
-                console.log('renewed')
             });
+
             this.render();
             this.renderMap();
             this.model.fetch();
