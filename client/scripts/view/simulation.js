@@ -12,6 +12,10 @@ define([
         mapSize: 600,
         template: Hogan.compile($$simulation),
 
+        events: {
+            'click #button-destroy': 'destroy'
+        },
+
         initialize: function () {
             var self = this;
             
@@ -78,7 +82,13 @@ define([
         renderMap: function () {
             console.log('renderMap!!');
             $('.simulation-map', this.$el).append(this.mapView.el);
+        },
+
+        destroy: function () {
+            console.log('destroy');
+            this.model.destroy();
         }
+
 
     });
 
