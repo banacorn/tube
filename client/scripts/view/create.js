@@ -3,8 +3,10 @@ define([
     'backbone',
     'hogan',
     'map',
+    '../view/map',
     'text!../../templates/create.html',
 ], function ($, Backbone, Hogan, Map, 
+    MapView,
     $$create
 ) {
 
@@ -32,62 +34,17 @@ define([
 
         render: function () {
             this.$el.html(this.template.render());
-            this.generateMap();
-        },
-
-        generateMap: function () {
-            this.map.generate(1);
-        },
-
-        renderMap: function () {
-            var canvas = $('#create-map canvas', this.$el).get(0);
-            if (canvas) {
-                var ctx = canvas.getContext('2d');
-
-                ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
-                var size        = this.map.get('size');
-                var population  = this.map.get('population');
-                var mapIn       = this.map.get('mapIn');
-                var mapOut      = this.map.get('mapOut');
-                var tileSize    = this.canvasSize / size;
-                var layer       = this.map.get('layer') || 'both';
-
-
-                for (var y = 0; y < size; y++) {
-                    for (var x = 0; x < size; x++) {
-                        var offset = y * size + x;
-                        var populationIn = mapIn[offset];
-                        var populationOut = mapOut[offset];
-
-                        if (populationIn + populationOut == 0) {
-                            ctx.fillStyle = "none";
-                        } else {
-                            var base = 4000;
-                            switch (layer) {
-                                case "both":
-                                    var population = populationIn + populationOut;
-                                    break;
-                                case "in":
-                                    var population = populationIn;
-                                    break;
-                                case "out":
-                                    var population = populationOut;
-                                    break;
-                            }
-                            var hue = 120 - 120 * population / base;
-                            var transparancy = population == 0 ? 0 : population / base + 0.5;
-                            ctx.fillStyle =  "hsla(" + hue + ", 80%, 70%, " + transparancy +")";
-                        }
-                        ctx.fillRect(
-                            tileSize * x, 
-                            tileSize * y, 
-                            tileSize,
-                            tileSize
-                        );
-                    }
+            var viewSize = 400;
+            this.mapView = new MapView({
+                model: this.map,
+                attributes: {
+                    width: viewSize,
+                    height: viewSize
                 }
+            });
+            $('#create-map', this.$el).html(this.mapView.el);
 
-            }
+            this.map.generate(1);
 
         },
 
