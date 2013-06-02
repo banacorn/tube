@@ -13,6 +13,7 @@ input{background:inherit;border:none;color:inherit;font-size:150%}
 button{background:#95a5a6;border:none;border-radius:4px;font-size:100%;padding:5px 15px;margin:5px;cursor:pointer;color:#fff;}
 button:hover{background:#dab10d;color:#fff}
 label{font-size:150%;padding-right:20px}
+footer{height:60px;background:#ecf0f1}
 #header{height:60px;background:#dab10d;}
 #header .link{color:#ecf0f1;font-size:120%;display:block;float:right;line-height:60px}
 #header > div{width:1000px;margin:0 auto}
@@ -22,6 +23,7 @@ section header{height:60px;line-height:60px;margin-bottom:20px;overflow:hidden;}
 section header h2{float:left}
 section header .header-group{float:right}
 section header a{padding-left:40px;line-height:100%}
+#main{overflow:hidden;min-height:400px;background:#ecf0f1}
 section{padding:40px 0}
 section > div{width:1000px;margin:0 auto}
 #section-create{overflow:hidden;}
