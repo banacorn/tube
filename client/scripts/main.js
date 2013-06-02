@@ -32,52 +32,6 @@ require([
     $, Backbone, io, Hogan,
     Storage, ROUTER
 ) {
-    // var CityItemView = Backbone.View.extend({
-    //     template: Hogan.compile($$cityItem),
-    //     tagName: 'li',
-    //     className: 'city',
-    //     initialize: function () {
-    //         this.render();
-    //     },
-
-    //     render: function () {
-    //         this.$el.html(this.template.render(this.model.toJSON()));
-    //         return this;
-    //     }
-
-    // });
-
-    // var CityListView = Backbone.View.extend({
-    //     tagName: 'ul',
-    //     id: 'city-list',
-
-    //     initialize: function () {
-    //         this.listenTo(CITIES, 'add', this.add);
-    //         this.listenTo(CITIES, 'remove', this.remove);
-    //         CITIES.fetch();
-    //         this.render();
-    //     },
-
-    //     add: function (model) {
-    //         var cityItemView = new CityItemView({
-    //             model: model
-    //         })
-    //         this.$el.append(cityItemView.el);
-    //     },
-
-    //     render: function () {
-    //         this.$el.html();
-    //         var $el = this.$el;
-    //         // CITIES.models.forEach(function (city) {
-    //         //     var cityItemView = new CityItemView({
-    //         //         model: city
-    //         //     });
-    //         //     $el.append(cityItemView.el);
-    //         // });
-    //         return this;
-    //     }
-    // });
-
 
     var App = Backbone.View.extend({
        
@@ -112,8 +66,6 @@ require([
     });
 
     $(function () {
-
-
         var app = new App;
         app.enablePushState();
         app.disableAnchor();
