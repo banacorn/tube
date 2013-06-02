@@ -10,7 +10,8 @@ a img{border:none}
 html,body{height:100%;font-family:'Tauri';height:100%;background:#ecf0f1;color:#38383a}
 a{text-decoration:none;color:inherit}
 input{background:inherit;border:none;color:inherit;font-size:150%}
-button{background:inherit;border:none;color:inherit;border-radius:4px;font-size:120%;padding:5px 15px;margin:5px;cursor:pointer}
+button{background:#95a5a6;border:none;border-radius:4px;font-size:100%;padding:5px 15px;margin:5px;cursor:pointer;color:#fff;}
+button:hover{background:#dab10d;color:#fff}
 label{font-size:150%;padding-right:20px}
 #header{height:60px;background:#dab10d;}
 #header .link{color:#ecf0f1;font-size:120%;display:block;float:right;line-height:60px}
@@ -20,20 +21,16 @@ h2{color:#38383a;font-size:200%;font-family:'Crete Round'}
 section header{margin-bottom:20px;overflow:hidden;}
 section header h2{float:left}
 section header .header-group{float:right}
-section header a{float:right;padding-left:40px;line-height:200%;font-size:120%}
+section header a{padding-left:40px;line-height:100%}
 section{padding:40px 0}
 section > div{width:1000px;margin:0 auto}
-#section-simulation{height:200px}
-#section-about{height:200px}
 #section-create{overflow:hidden;}
 #section-create canvas{border:10px solid #ecf0f1}
 #section-create #create-map,#section-create #create-form{float:left}
-#section-create button{background:#38383a;color:#fff;}
-#section-create button:hover{background:#dab10d;color:#fff}
 #section-create #button-layer{width:140px}
 #section-create form{padding-left:40px;}
 #section-create form > div{padding:10px 0}
-.simulation-item{float:left;width:300px;height:300px;margin-bottom:50px;margin-right:50px;}
+.simulation-item{float:left;width:280;height:280;margin:40px 80px 40px 0;}
 .simulation-item figcaption{margin:0;margin-top:240px;width:260px;padding:10px;height:20px;line-height:20px;background:rgba(236,240,241,0.7);position:absolute}
 .simulation-item .simulation-item-name{padding:0 5px;font-size:120%}
 .simulation-item .simulation-item-name:first-letter{text-transform:uppercase}

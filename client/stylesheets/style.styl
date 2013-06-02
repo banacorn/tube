@@ -78,14 +78,20 @@ input
     font-size: 150%
 
 button
-    background: inherit
+    background: $concrete
     border: none
-    color: inherit
+    // color: inherit
     border-radius: 4px
-    font-size: 120%
+    font-size: 100%
     padding: 5px 15px
     margin: 5px
     cursor: pointer
+    
+    color: white
+
+    &:hover
+        background: $color
+        color: white
 
 label
     font-size: 150%
@@ -140,10 +146,9 @@ section header
     .header-group
         float: right
     a
-        float: right
         padding-left: 40px
-        line-height: 200%
-        font-size: 120%
+        line-height: 100%
+        // font-size: 120%
 
 //
 //  Sections
@@ -157,21 +162,6 @@ section
 section > div
     width: 1000px
     margin: 0 auto
-
-
-#section-simulation
-
-    // border-top: $blau 10px dashed
-    height: 200px
-    // background: white
-
-    // border: 10px darken($belizehole, 20%) dashed
-    // border-bottom: 10px darken($belizehole, 20%) dashed
-
-
-#section-about
-
-    height: 200px
 
 
 //
@@ -190,14 +180,6 @@ section > div
     #create-form
         float: left    
 
-    button
-        background: $basalt
-        color: white
-
-        &:hover
-            background: $color
-            color: white
-
 
     #button-layer
         width: 140px
@@ -211,21 +193,19 @@ section > div
 //  Home
 //  
 
-$simulationItemSize = 300px
+$simulationItemSize = 280
 $simulationItemMargin = 0px
 
 .simulation-item
     float: left
     width: $simulationItemSize
     height: $simulationItemSize
-    margin-bottom: 50px
-    margin-right: 50px
-    // background: white
+    margin: 40px 80px 40px 0
 
     figcaption
         margin: $simulationItemMargin
         margin-top: 240px + $simulationItemMargin
-        width: $simulationItemSize - $simulationItemMargin * 2 - 40
+        width: $simulationItemSize - $simulationItemMargin * 2 - 20
         padding: 10px
         height: 20px
         line-height: 20px

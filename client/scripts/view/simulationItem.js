@@ -25,12 +25,13 @@ define([
         },
 
         renderMap: function () {
-            var viewSize = 300;
+            var viewSize = 280;
+            var viewMargin = 0;
             this.mapView = new MapView({
                 model: this.model,
                 attributes: {
-                    width: viewSize - 20,
-                    height: viewSize - 20
+                    width: viewSize - viewMargin * 2,
+                    height: viewSize - viewMargin * 2
                 }
             });
             $(this.$el).append(this.mapView.el);
