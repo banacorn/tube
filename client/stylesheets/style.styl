@@ -96,16 +96,32 @@ label
 //  Stuctural
 //
 
-$headerHeight = 100px
+$headerHeight = 60px
+
+
+
+#header
+    height: $headerHeight
+    background: $gold
+    .link
+        color: $clouds
+        font-size: 120%
+        display: block
+        float: right
+        line-height: $headerHeight
+
+#header > div
+    width: 1000px
+    margin: 0 auto
 
 
 
 h1
     height: $headerHeight
     line-height: $headerHeight
-    color: $clouds
-    text-align: center
-    font-size: 300%
+    color: white
+    float: left
+    font-size: 250%
     font-family: 'Crete Round'
 
 h2
@@ -133,10 +149,6 @@ section header
 //  Sections
 //
 
-
-#header
-    height: $headerHeight
-    background: $basalt
 
 
 section

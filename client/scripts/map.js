@@ -11,6 +11,7 @@ define([
 
     return Backbone.Model.extend({
         urlRoot: '/api/simulation',
+        
         defaults: {
             name: 'untitled',
             size: 40,
@@ -18,10 +19,6 @@ define([
             mapIn: [],
             mapOut: [],
             layer: 'both'
-        },
-
-        validate: function (attributes) {
-
         },
 
         generate: function (core) {

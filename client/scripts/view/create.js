@@ -2,10 +2,14 @@ define([
     'jquery',
     'backbone',
     'hogan',
+    'map',
+    'collection/simulation',
     'text!../../templates/create.html',
-], function ($, Backbone, Hogan, $$create) {
+], function ($, Backbone, Hogan, Map, 
+    SimulationCollection,
+    $$create
+) {
 
-   
     var CreateView = Backbone.View.extend({
         canvasSize: 400,
         template: Hogan.compile($$create),
@@ -19,6 +23,7 @@ define([
         },
 
         initialize: function () {
+            
             this.map = new Map;
             this.listenTo(this.map, 'generated', this.renderMap);
             this.listenTo(this.map, 'change:layer', this.renderMap);

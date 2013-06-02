@@ -3,8 +3,6 @@ require([
     'underscore'
 ], function (Backbone, _) {
 
-    console.log('Storage initialized');
-
     // a thin layer of abstraction on top of localStorage
 
     var Storage = {

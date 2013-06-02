@@ -12,13 +12,15 @@ a{text-decoration:none;color:inherit}
 input{background:inherit;border:none;color:inherit;font-size:150%}
 button{background:inherit;border:none;color:inherit;border-radius:4px;font-size:120%;padding:5px 15px;margin:5px;cursor:pointer}
 label{font-size:150%;padding-right:20px}
-h1{height:100px;line-height:100px;color:#ecf0f1;text-align:center;font-size:300%;font-family:'Crete Round'}
+#header{height:60px;background:#dab10d;}
+#header .link{color:#ecf0f1;font-size:120%;display:block;float:right;line-height:60px}
+#header > div{width:1000px;margin:0 auto}
+h1{height:60px;line-height:60px;color:#fff;float:left;font-size:250%;font-family:'Crete Round'}
 h2{color:#38383a;font-size:200%;font-family:'Crete Round'}
 section header{margin-bottom:20px;overflow:hidden;}
 section header h2{float:left}
 section header .header-group{float:right}
 section header a{float:right;padding-left:40px;line-height:200%;font-size:120%}
-#header{height:100px;background:#38383a}
 section{padding:40px 0}
 section > div{width:1000px;margin:0 auto}
 #section-simulation{height:200px}
