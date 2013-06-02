@@ -89,6 +89,9 @@ define([
             var name = $('#input-name', this.el$).val();
             this.map.set('name', name);
             this.map.save();
+            this.map.on('sync', function (model) {
+                Backbone.trigger('navigate', '/simulation/' + model.id, {trigger: true});
+            });
         },
 
         focusNameInput: function () {
