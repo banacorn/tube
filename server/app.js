@@ -23,14 +23,6 @@ var _ = require('underscore');
 
 var tower = new EventEmitter;
 
-var processMap = function (data) {
-    data.mapIn.map(function (n) {
-        console.log(n);
-    });
-    console.log(data.mapOut);
-    return data;
-};
-
 //
 //  EXPRESS
 //
@@ -64,35 +56,9 @@ server.listen(3000);
 
 
 
+// io.sockets.on('connection', function () {
 
-// var portConstructor = function (socket, address) {
-//     var prefix = 'store';
-
-//     return function (callback) {
-//         socket.on(prefix + ':sync:' + address, function (hash) {
-//             var type = hash.type;
-//             var method = hash.method;
-//             var data = hash.data;
-//             var address = hash.address;
-//             callback(method, type, address, data);
-//         });
-//     };
-// } 
-
-
-// io.sockets.on('connection', function (socket) {
-//     var simulation = portConstructor(socket, 'simulation');
-
-//     simulation(function (method, type, address, data) {
-//         console.log(method);
-//         fs.writeFile('dump.json', JSON.stringify(data));
-
-
-
-
-//     });
 // });
-
 
 //
 //  SOCKET & REDIS
@@ -101,6 +67,14 @@ server.listen(3000);
 db.on("error", function (err) {
     console.log("Error " + err);
 });
+
+tower.on('init', function (id) {
+    console.log('[App -> Tower -> Core] init', id);
+    db.publish('tube', 'init:' + id);
+});
+
+// db.on("", function (channel, message) {
+// });
 
 
 var createPort = function (app, db, urlPreifx, keyPrefix) {
@@ -141,10 +115,9 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
             app.post(url(model), function (req, res) {
                 var data = req.body;
 
-                data = processMap(data);
                 db.get(key(model, 'id'), function (err, id) {
-                    tower.emit('create', id);
                     if (err) throw err;
+                    tower.emit('init', id);
                     db.hmset(key(model, id), stringifyHash(_.extend(data, {
                         id: id
                     })));
@@ -185,7 +158,6 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
             // PUT
             app.put(url(model, ':id'), function (req, res) {
                 var id = req.params.id;
-                tower.emit('update', id);
                 var data = req.body;
                 db.sadd(key(model), id);
                 db.incr(key(model, 'id'));
@@ -196,7 +168,6 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
             // DELETE
             app.delete(url(model, ':id'), function (req, res) {
                 var id = req.params.id;
-                tower.emit('destroy', id);
                 db.del(key(model, id));
                 db.srem(key(model), id);
                 res.send(200);
@@ -207,22 +178,5 @@ var createPort = function (app, db, urlPreifx, keyPrefix) {
 };
 
 var port = createPort(app, db, 'api', 'tube');
-
 port('simulation');
 
-var emit = function (event) {
-    return function (id) {
-
-        console.log(id + ' ' + event);
-        if (id)
-            db.publish('tube', event + ':' + id);
-        else
-            db.publish('tube', event);
-    }
-}
-
-tower
-    .on('initialize', emit('initialize'))
-    .on('create', emit('create'))
-    .on('destroy', emit('destroy'))
-    .on('update', emit('update'));

@@ -33,6 +33,14 @@ require([
     Storage, ROUTER
 ) {
 
+    var socket = io.connect();
+
+    socket.on('tube:init', function (id) {
+        console.log(id, 'initialize');
+    });
+
+
+
     var App = Backbone.View.extend({
        
         initialize: function () {

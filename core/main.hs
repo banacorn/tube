@@ -9,6 +9,10 @@ import Control.Monad.ST
 import System.Random --(getStdRandom, randomR, randomRs)  
 import Data.Monoid
 import qualified Data.ByteString as B
+--import Data.Word
+--import Data.ByteString.Lazy.Char8 (pack)
+import Data.ByteString.UTF8 (toString, fromString)
+
 
 --import Data.Array.IO
 import Data.Array.ST
@@ -20,6 +24,7 @@ import Simulation
 --
 --  some redis shit
 --
+
 
 connectAndRun f = connect defaultConnectInfo >>= flip runRedis f
 
@@ -37,7 +42,42 @@ ack = pubSub (subscribe ["tube"]) $ \msg -> do
 --
 
 
+data Event  = Initialize Int
+            | Run Int
+            deriving (Show) 
 
+--readMap :: Int -> Redis b0
+readMap id = hgetall (fromString $ "tube:simulation:" ++ show id)
+
+boo id = connectAndRun $ do
+    hash <- readMap id
+    case hash of
+        Right result -> liftIO . print . processMap . parseMap $ result
+
+parseEvent :: String -> Event
+parseEvent msg
+    | prefix == "init" = Initialize . read $ drop 5 msg
+    | prefix == "run:" = Run . read $ drop 4 msg 
+    where   prefix = take 4 msg
+
+adapter :: Message -> Event
+adapter = parseEvent . toString . msgMessage
+
+handler :: Message -> IO PubSub
+handler msg = do
+    let event = adapter msg
+    print event
+    return mempty
+
+controlTower = do
+    pubSub (subscribe ["tube"]) handler        -- listening 'tube' for incoming messages
+    --where   printMsg msg = do
+    --            connectAndRun (set "A" "5")
+    --            putStrLn $ "Message from " ++ show (msgMessage msg)
+    --            return mempty
+
+
+main = connectAndRun controlTower
 
 
 
