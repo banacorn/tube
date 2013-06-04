@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tube where   
+module Main where   
 
 import Database.Redis
 import Control.Monad.Trans (liftIO)
@@ -18,7 +18,7 @@ import Data.ByteString.UTF8 (toString, fromString)
 import Data.Array.ST
 
 
-import Simulation
+import Tube.Simulation
 
 
 --
@@ -49,10 +49,17 @@ data Event  = Initialize Int
 --readMap :: Int -> Redis b0
 readMap id = hgetall (fromString $ "tube:simulation:" ++ show id)
 
+poo id = connectAndRun $ do
+    hash <- readMap id
+    case hash of
+        Right result -> liftIO . print $ result
+
 boo id = connectAndRun $ do
     hash <- readMap id
     case hash of
-        Right result -> liftIO . print . processMap . parseMap $ result
+        Right result -> liftIO . print . commuteTime . toSimulation . parseMap $ result
+
+main = boo 0
 
 parseEvent :: String -> Event
 parseEvent msg
@@ -77,7 +84,7 @@ controlTower = do
     --            return mempty
 
 
-main = connectAndRun controlTower
+--main = connectAndRun controlTower
 
 
 

@@ -51,7 +51,7 @@ define([
                         if (populationIn == undefined || populationOut == undefined || populationIn + populationOut == 0) {
                             ctx.fillStyle = "none";
                         } else {
-                            var base = 4000;
+                            var base = 6400000 / (size * size);
                             var populationHere = 0;
                             switch (layer) {
                                 case "both":

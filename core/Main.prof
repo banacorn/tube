@@ -1,0 +1,164 @@
+	Mon Jun  3 20:28 2013 Time and Allocation Profiling Report  (Final)
+
+	   Main +RTS -p -RTS
+
+	total time  =        0.95 secs   (951 ticks @ 1000 us, 1 processor)
+	total alloc = 809,691,188 bytes  (excludes profiling overheads)
+
+COST CENTRE                              MODULE          %time %alloc
+
+commuteTime.commuteFromBlock             Tube.Simulation  23.0   24.0
+fromOnetoAll.normalize                   Tube.Block       16.3   17.7
+dispatch.baseShare                       Tube.Block       11.0   13.9
+commuteTime.commuteFromBlock.time        Tube.Simulation  10.2    6.3
+fromOnetoOne                             Tube.Block        8.0    3.8
+fromOnetoAll.total                       Tube.Block        7.3   13.9
+commuteTime.commuteFromBlock.taggedFlows Tube.Simulation   7.3   12.7
+dispatch.baseShare.\                     Tube.Block        6.5    2.5
+parseMap.lookupFor                       Tube.Simulation   4.9    2.3
+dispatch.sprinkle                        Tube.Block        2.2    2.2
+dispatch.baseSum                         Tube.Block        1.9    0.0
+
+
+                                                                                                           individual     inherited
+COST CENTRE                                        MODULE                                no.     entries  %time %alloc   %time %alloc
+
+MAIN                                               MAIN                                  125           0    0.0    0.0   100.0  100.0
+ main                                              Main                                  253           0    0.0    0.0   100.0  100.0
+  boo                                              Main                                  254           0    0.0    0.0   100.0  100.0
+   readMap                                         Main                                  272           1    0.0    0.0     0.0    0.0
+    hgetall                                        Database.Redis.Commands               273           1    0.0    0.0     0.0    0.0
+     sendRequest                                   Database.Redis.Core                   274           1    0.0    0.0     0.0    0.0
+      renderRequest                                Database.Redis.Protocol               281           1    0.0    0.0     0.0    0.0
+       renderRequest.argCnt                        Database.Redis.Protocol               283           1    0.0    0.0     0.0    0.0
+        showBS                                     Database.Redis.Protocol               286           1    0.0    0.0     0.0    0.0
+       renderRequest.args                          Database.Redis.Protocol               282           1    0.0    0.0     0.0    0.0
+        renderArg                                  Database.Redis.Protocol               288           2    0.0    0.0     0.0    0.0
+         renderArg.argLen                          Database.Redis.Protocol               290           2    0.0    0.0     0.0    0.0
+          showBS                                   Database.Redis.Protocol               293           0    0.0    0.0     0.0    0.0
+   connectAndRun                                   Main                                  255           0    0.0    0.0   100.0  100.0
+    runRedis                                       Database.Redis.Core                   260           1    0.0    0.0   100.0  100.0
+     runRedis.\                                    Database.Redis.Core                   270           1    0.0    0.0    99.8  100.0
+      runRedisInternal                             Database.Redis.Core                   271           1    0.0    0.0    99.8  100.0
+       commuteTime                                 Tube.Simulation                       323           1    0.3    0.0    41.5   43.6
+        commuteTime.commuteFromBlock               Tube.Simulation                       337        1600   23.0   24.0    41.2   43.6
+         commuteTime.commuteFromBlock.commuteSpeed Tube.Simulation                       363           1    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.blockSize    Tube.Simulation                       362           1    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.speed        Tube.Simulation                       361           1    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.coord        Tube.Simulation                       357         972    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.time         Tube.Simulation                       355     2560000   10.2    6.3    10.9    6.9
+          manhattanDistance                        Tube.Block                            360      607863    0.7    0.6     0.7    0.6
+         commuteTime.commuteFromBlock.(...)        Tube.Simulation                       341        1600    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.flows        Tube.Simulation                       340        1600    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.size         Tube.Simulation                       339           1    0.0    0.0     0.0    0.0
+         commuteTime.commuteFromBlock.taggedFlows  Tube.Simulation                       338        1600    7.3   12.7     7.3   12.7
+       toSimulation                                Tube.Simulation                       322           1    0.0    0.0    53.3   54.1
+        toSimulation.blocks'                       Tube.Simulation                       336           1    0.0    0.0    53.3   54.0
+         toFlowBlock                               Tube.Block                            342        1600    0.1    0.0    53.3   54.0
+          toFlowBlock.(...)                        Tube.Block                            359         972    0.0    0.0     0.0    0.0
+          toFlowBlock.coord                        Tube.Block                            358         972    0.0    0.0     0.0    0.0
+          fromOnetoAll                             Tube.Block                            343        1600    0.0    0.0    53.2   54.0
+           dispatch                                Tube.Block                            348        1600    0.0    0.0    21.7   18.6
+            dispatch.sprinkle                      Tube.Block                            354      364776    2.2    2.2     2.2    2.2
+            dispatch.baseSum                       Tube.Block                            351        1600    1.9    0.0     1.9    0.0
+            dispatch.baseShare                     Tube.Block                            349        1600   11.0   13.9    17.6   16.4
+             dispatch.baseShare.\                  Tube.Block                            350     2560000    6.5    2.5     6.5    2.5
+           fromOnetoAll.normalize                  Tube.Block                            347        1600   16.3   17.7    16.3   17.7
+           fromOnetoAll.total                      Tube.Block                            346        1600    7.3   13.9    15.2   17.7
+            fromOnetoOne                           Tube.Block                            352     2560000    8.0    3.8     8.0    3.8
+             to                                    Tube.Block                            353     2560000    0.0    0.0     0.0    0.0
+           from                                    Tube.Block                            344        1600    0.0    0.0     0.0    0.0
+        toSimulation.blocks                        Tube.Simulation                       331           1    0.0    0.0     0.0    0.0
+         toSimulation.toBlock                      Tube.Simulation                       345        1600    0.0    0.0     0.0    0.0
+        toSimulation.coordinates                   Tube.Simulation                       330           1    0.0    0.0     0.0    0.0
+        toSimulation.size                          Tube.Simulation                       324           1    0.0    0.0     0.0    0.0
+       parseMap                                    Tube.Simulation                       321           1    0.0    0.0     4.9    2.3
+        parseMap.population                        Tube.Simulation                       364           1    0.0    0.0     0.0    0.0
+         parseMap.lookupFor                        Tube.Simulation                       365           1    0.0    0.0     0.0    0.0
+        parseMap.mapOut                            Tube.Simulation                       332           1    0.0    0.0     2.4    1.1
+         parseMap.lookupFor                        Tube.Simulation                       333           1    2.4    1.1     2.4    1.1
+        parseMap.mapIn                             Tube.Simulation                       325           1    0.0    0.0     2.5    1.1
+         parseMap.lookupFor                        Tube.Simulation                       326           1    2.5    1.1     2.5    1.1
+       readMap                                     Main                                  275           0    0.0    0.0     0.0    0.0
+        hgetall                                    Database.Redis.Commands               276           0    0.0    0.0     0.0    0.0
+         sendRequest                               Database.Redis.Core                   277           0    0.0    0.0     0.0    0.0
+          returnDecode                             Database.Redis.Core                   297           1    0.0    0.0     0.0    0.0
+           decode                                  Database.Redis.Types                  298           1    0.0    0.0     0.0    0.0
+            decode.pairs                           Database.Redis.Types                  319           9    0.0    0.0     0.0    0.0
+             decode                                Database.Redis.Types                  320          16    0.0    0.0     0.0    0.0
+          request                                  Database.Redis.ProtocolPipelining     279           1    0.0    0.0     0.0    0.0
+           recv                                    Database.Redis.ProtocolPipelining     296           1    0.0    0.0     0.0    0.0
+            recv.r                                 Database.Redis.ProtocolPipelining     299           1    0.0    0.0     0.0    0.0
+           send                                    Database.Redis.ProtocolPipelining     280           1    0.0    0.0     0.0    0.0
+     connect                                       Database.Redis.Core                   263           0    0.0    0.0     0.0    0.0
+      connect.create                               Database.Redis.Core                   264           0    0.0    0.0     0.0    0.0
+       connect                                     Database.Redis.ProtocolPipelining     265           1    0.0    0.0     0.0    0.0
+     connect.create                                Database.Redis.Core                   262           0    0.0    0.0     0.2    0.0
+      connect                                      Database.Redis.ProtocolPipelining     267           0    0.2    0.0     0.2    0.0
+       hGetReplies                                 Database.Redis.ProtocolPipelining     268           1    0.0    0.0     0.0    0.0
+        hGetReplies.catchIOError                   Database.Redis.ProtocolPipelining     309           0    0.0    0.0     0.0    0.0
+         hGetReplies.go                            Database.Redis.ProtocolPipelining     310           0    0.0    0.0     0.0    0.0
+          hGetReplies.readMore                     Database.Redis.ProtocolPipelining     311           0    0.0    0.0     0.0    0.0
+        hGetReplies.readMore                       Database.Redis.ProtocolPipelining     304           1    0.0    0.0     0.0    0.0
+        hGetReplies.go                             Database.Redis.ProtocolPipelining     269           2    0.0    0.0     0.0    0.0
+         hGetReplies.readMore                      Database.Redis.ProtocolPipelining     305           0    0.0    0.0     0.0    0.0
+         reply                                     Database.Redis.Protocol               301           0    0.0    0.0     0.0    0.0
+          singleLine                               Database.Redis.Protocol               303           0    0.0    0.0     0.0    0.0
+           integer                                 Database.Redis.Protocol               314           0    0.0    0.0     0.0    0.0
+            bulk                                   Database.Redis.Protocol               316           0    0.0    0.0     0.0    0.0
+             multiBulk                             Database.Redis.Protocol               318           0    0.0    0.0     0.0    0.0
+      connect                                      Database.Redis.Core                   266           0    0.0    0.0     0.0    0.0
+    connect                                        Database.Redis.Core                   259           0    0.0    0.0     0.0    0.0
+     connect.create                                Database.Redis.Core                   261           1    0.0    0.0     0.0    0.0
+ CAF                                               Main                                  249           0    0.0    0.0     0.0    0.0
+  connectAndRun                                    Main                                  256           0    0.0    0.0     0.0    0.0
+   connect                                         Database.Redis.Core                   258           1    0.0    0.0     0.0    0.0
+  main                                             Main                                  250           1    0.0    0.0     0.0    0.0
+   boo                                             Main                                  251           1    0.0    0.0     0.0    0.0
+    connectAndRun                                  Main                                  252           1    0.0    0.0     0.0    0.0
+ CAF                                               Tube.Simulation                       248           0    0.0    0.0     0.0    0.0
+  parseMap                                         Tube.Simulation                       327           0    0.0    0.0     0.0    0.0
+   parseMap.population                             Tube.Simulation                       366           0    0.0    0.0     0.0    0.0
+    parseMap.lookupFor                             Tube.Simulation                       367           0    0.0    0.0     0.0    0.0
+   parseMap.mapOut                                 Tube.Simulation                       334           0    0.0    0.0     0.0    0.0
+    parseMap.lookupFor                             Tube.Simulation                       335           0    0.0    0.0     0.0    0.0
+   parseMap.mapIn                                  Tube.Simulation                       328           0    0.0    0.0     0.0    0.0
+    parseMap.lookupFor                             Tube.Simulation                       329           0    0.0    0.0     0.0    0.0
+ CAF                                               Tube.Block                            247           0    0.0    0.0     0.0    0.0
+  <<->>                                            Tube.Block                            356           1    0.0    0.0     0.0    0.0
+ CAF                                               Database.Redis.Core                   244           0    0.0    0.0     0.0    0.0
+  liftRedis                                        Database.Redis.Core                   278           1    0.0    0.0     0.0    0.0
+  defaultConnectInfo                               Database.Redis.Core                   257           1    0.0    0.0     0.0    0.0
+ CAF                                               Database.Redis.ProtocolPipelining     243           0    0.0    0.0     0.0    0.0
+  connect                                          Database.Redis.ProtocolPipelining     306           0    0.0    0.0     0.0    0.0
+   hGetReplies                                     Database.Redis.ProtocolPipelining     307           0    0.0    0.0     0.0    0.0
+    hGetReplies.maxRead                            Database.Redis.ProtocolPipelining     312           1    0.0    0.0     0.0    0.0
+    hGetReplies.catchIOError                       Database.Redis.ProtocolPipelining     308           1    0.0    0.0     0.0    0.0
+ CAF                                               Database.Redis.Protocol               242           0    0.0    0.0     0.0    0.0
+  multiBulk                                        Database.Redis.Protocol               317           1    0.0    0.0     0.0    0.0
+  bulk                                             Database.Redis.Protocol               315           1    0.0    0.0     0.0    0.0
+  integer                                          Database.Redis.Protocol               313           1    0.0    0.0     0.0    0.0
+  singleLine                                       Database.Redis.Protocol               302           1    0.0    0.0     0.0    0.0
+  reply                                            Database.Redis.Protocol               300           1    0.0    0.0     0.0    0.0
+  renderArg                                        Database.Redis.Protocol               289           0    0.0    0.0     0.0    0.0
+   renderArg.argLen                                Database.Redis.Protocol               291           0    0.0    0.0     0.0    0.0
+    showBS                                         Database.Redis.Protocol               292           1    0.0    0.0     0.0    0.0
+  crlf                                             Database.Redis.Protocol               287           1    0.0    0.0     0.0    0.0
+  renderRequest                                    Database.Redis.Protocol               284           0    0.0    0.0     0.0    0.0
+   renderRequest.argCnt                            Database.Redis.Protocol               285           0    0.0    0.0     0.0    0.0
+ CAF                                               Database.Redis.Types                  240           0    0.0    0.0     0.0    0.0
+  encode                                           Database.Redis.Types                  295           1    0.0    0.0     0.0    0.0
+ CAF                                               Database.Redis.Commands               239           0    0.0    0.0     0.0    0.0
+  hgetall                                          Database.Redis.Commands               294           0    0.0    0.0     0.0    0.0
+ CAF                                               Data.Pool                             238           0    0.0    0.0     0.0    0.0
+ CAF                                               Network                               235           0    0.0    0.0     0.0    0.0
+ CAF                                               Network.BSD                           234           0    0.0    0.0     0.0    0.0
+ CAF                                               Data.Hashable.Class                   198           0    0.0    0.0     0.0    0.0
+ CAF                                               Data.Attoparsec.ByteString.Internal   192           0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.Conc.Signal                       178           0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.Float                             173           0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Encoding                       170           0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Encoding.Iconv                 168           0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Handle.FD                      161           0    0.0    0.0     0.0    0.0
+ CAF                                               Data.Fixed                            149           0    0.0    0.0     0.0    0.0
+ CAF                                               Text.Read.Lex                         141           0    0.0    0.0     0.0    0.0
